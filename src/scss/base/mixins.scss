@@ -1,0 +1,23 @@
+@mixin tablets {
+  @media screen and (max-width: $tablets) {
+    @content;
+  }
+}
+
+@mixin phones {
+  @media screen and (max-width: $phones) {
+    @content;
+  }
+}
+
+@mixin sm-desktops {
+  @media screen and (max-width: $sm-desktops) {
+    @content;
+  }
+}
+
+@mixin lg-desktops {
+  @media screen and (max-width: $lg-desktops) {
+    @content;
+  }
+}

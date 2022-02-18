@@ -1,0 +1,86 @@
+.home {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__wrapper {
+    width: 100%;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 0px;
+
+    @include tablets {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: var(--bs-gutter-x, 0.75rem);
+    padding-right: var(--bs-gutter-x, 0.75rem);
+
+    @include phones {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  &__slider {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    @include tablets {
+      display: none;
+    }
+  }
+
+  &__btn.btn {
+    min-width: 250px;
+
+    @include phones {
+      min-width: none;
+      width: 100%;
+      border-radius: 0px;
+    }
+  }
+
+  &__intro {
+    margin-bottom: 60px;
+
+    @include phones {
+      margin-bottom: 32px;
+      padding-left: var(--bs-gutter-x, 0.75rem);
+      padding-right: var(--bs-gutter-x, 0.75rem);
+    }
+  }
+
+  &__desc {
+    font-weight: 300;
+    font-size: 26px;
+    color: $gray;
+
+    @include phones {
+      font-size: 18px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 34px;
+
+    @include phones {
+      margin-bottom: 16px;
+    }
+  }
+}

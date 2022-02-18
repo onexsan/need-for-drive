@@ -1,0 +1,110 @@
+.wrapper {
+  .btn {
+    padding: 11px 15px;
+    background: linear-gradient(90deg, $green 2.61%, $darkgreen 112.6%);
+    color: $white;
+
+    &:hover {
+      background: linear-gradient(90deg, #0b934a 2.61%, #026e47 112.6%);
+      color: $white;
+    }
+    &:active {
+      background: linear-gradient(90deg, #076432 2.61%, #013c27 112.6%);
+      color: $white;
+    }
+    &:focus {
+      background: linear-gradient(90deg, #0b934a 2.61%, #026e47 112.6%);
+      color: $white;
+    }
+
+    &--color-reverse {
+      background: linear-gradient(90deg, $darkgreen 0%, $green 100%);
+
+      &:hover {
+        background: linear-gradient(90deg, #026e47 2.61%, #0b934a 112.6%);
+        color: $white;
+      }
+      &:active {
+        background: linear-gradient(90deg, #013c27 2.61%, #076432 112.6%);
+        color: $white;
+      }
+      &:focus {
+        background: linear-gradient(90deg, #026e47 2.61%, #0b934a 112.6%);
+        color: $white;
+      }
+    }
+  }
+}
+
+.link {
+  background-color: transparent;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  text-decoration: none;
+
+  color: $black;
+
+  &:hover {
+    color: $green;
+  }
+
+  &:disabled {
+    color: $gray;
+  }
+}
+
+.link--green {
+  @extend .link;
+  color: $green;
+
+  &:hover {
+    color: $white;
+  }
+}
+
+.link--lang {
+  @extend .link;
+  font-size: 13px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+
+  &:hover {
+    border: 1px solid $white;
+  }
+
+  &:active {
+    color: $green;
+  }
+
+  @include phones {
+    display: none;
+  }
+}
+
+.menu-btn {
+  background-color: transparent;
+  border: 1px solid transparent;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:active,
+  &:focus {
+    .menu-btn__icon path {
+      stroke: $green;
+    }
+  }
+
+  &__icon path {
+    @include phones {
+      stroke: $black;
+    }
+  }
+}
