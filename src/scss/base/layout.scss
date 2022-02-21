@@ -29,6 +29,19 @@ html,
 
   .container {
     height: 100%;
+    width: 100%;
+    padding-left: 64px;
+    padding-right: 64px;
+
+    @include sm-desktops {
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+
+    @include phones {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
   }
 }
 

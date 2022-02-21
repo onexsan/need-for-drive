@@ -17,7 +17,11 @@
       <div class="home__slider">
         <div class="slider">
           <div class="slider__slide slide">
-            <img src="~@/assets/img/slide-1.jpg" alt="" class="slide__img" />
+            <img
+              src="~@/assets/img/slide-1.jpg"
+              alt="Slider image"
+              class="slide__img"
+            />
             <div class="slide__content">
               <div class="slide__title">Бесплатная парковка</div>
               <div class="slide__desc">

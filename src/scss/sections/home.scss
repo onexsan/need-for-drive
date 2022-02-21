@@ -17,7 +17,7 @@
     grid-template-columns: 50% 50%;
     gap: 0px;
 
-    @include tablets {
+    @include lg-tablets {
       grid-template-columns: 1fr;
     }
   }
@@ -27,12 +27,18 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding-left: var(--bs-gutter-x, 0.75rem);
-    padding-right: var(--bs-gutter-x, 0.75rem);
+    padding-left: var(--bs-gutter-x, 64px);
+    padding-right: var(--bs-gutter-x, 64px);
+
+    @include sm-desktops {
+      padding-left: var(--bs-gutter-x, 32px);
+      padding-right: var(--bs-gutter-x, 32px);
+    }
 
     @include phones {
       padding-left: 0;
       padding-right: 0;
+      padding-top: 33px;
     }
   }
 
@@ -41,7 +47,7 @@
     flex-direction: column;
     justify-content: center;
     position: relative;
-    @include tablets {
+    @include lg-tablets {
       display: none;
     }
   }
@@ -61,8 +67,8 @@
 
     @include phones {
       margin-bottom: 32px;
-      padding-left: var(--bs-gutter-x, 0.75rem);
-      padding-right: var(--bs-gutter-x, 0.75rem);
+      padding-left: var(--bs-gutter-x, 16px);
+      padding-right: var(--bs-gutter-x, 16px);
     }
   }
 

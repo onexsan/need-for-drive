@@ -8,7 +8,7 @@
     role="presentation"
     class="menu-btn__icon"
   >
-    <title :id="iconName" lang="en">{{ iconName }} icon</title>
+    <title :id="iconName" lang="en">{{ iconName }}</title>
     <g :fill="iconColor">
       <path
         d="M4 16H28"
@@ -40,7 +40,7 @@ export default {
   props: {
     iconName: {
       type: String,
-      default: 'menu',
+      default: 'Menu',
     },
     width: {
       type: [Number, String],

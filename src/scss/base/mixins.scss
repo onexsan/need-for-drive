@@ -21,3 +21,9 @@
     @content;
   }
 }
+
+@mixin lg-tablets {
+  @media screen and (max-width: $lg-tablets) {
+    @content;
+  }
+}
