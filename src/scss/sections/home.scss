@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: flex-start;
 
-  &__main {
+  &__desc {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -22,7 +22,7 @@
     }
   }
 
-  &__content {
+  &__main {
     display: flex;
     flex-direction: column;
     justify-content: center;

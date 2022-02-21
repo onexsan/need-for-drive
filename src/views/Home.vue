@@ -1,9 +1,9 @@
 <template>
   <section class="home">
     <div class="home__wrapper">
-      <main class="home__main">
+      <div class="home__desc">
         <Header />
-        <div class="home__content">
+        <main class="home__main">
           <div class="home__intro">
             <h1 class="title home__title">
               Каршеринг <span>Need for drive</span>
@@ -11,9 +11,9 @@
             <div class="home__desc">Поминутная аренда авто твоего города</div>
           </div>
           <a href="#" class="btn home__btn">Забронировать</a>
-        </div>
+        </main>
         <Footer />
-      </main>
+      </div>
       <div class="home__slider">
         <div class="slider">
           <div class="slider__slide slide">
