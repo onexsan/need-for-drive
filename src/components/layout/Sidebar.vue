@@ -2,7 +2,6 @@
   <aside class="sidebar">
     <div class="container sidebar__container">
       <button class="menu-btn" v-b-modal.hamburger-modal>
-        <!-- <IconMenu :iconColor="'white'" width="32" height="32" /> -->
         <svg>
           <use xlink:href="#icon-menu" class="menu-btn__icon"></use>
         </svg>
