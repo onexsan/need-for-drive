@@ -2,7 +2,10 @@
   <aside class="sidebar">
     <div class="container sidebar__container">
       <button class="menu-btn" v-b-modal.hamburger-modal>
-        <IconMenu :iconColor="'white'" width="32" height="32" />
+        <!-- <IconMenu :iconColor="'white'" width="32" height="32" /> -->
+        <svg>
+          <use xlink:href="#icon-menu" class="menu-btn__icon"></use>
+        </svg>
       </button>
       <button class="link link--green link--lang">Eng</button>
     </div>
@@ -11,11 +14,9 @@
 </template>
 
 <script>
-import IconMenu from '@/components/icons/IconMenu.vue';
 import HamburgerModal from '@/components/modals/HamburgerModal.vue';
 export default {
   components: {
-    IconMenu,
     HamburgerModal,
   },
 };

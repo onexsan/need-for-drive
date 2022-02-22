@@ -4,14 +4,17 @@
     <div class="main-content">
       <router-view />
     </div>
+    <IconTemplate />
   </div>
 </template>
 
 <script>
 import Sidebar from '@/components/layout/Sidebar.vue';
+import IconTemplate from '@/components/common/IconTemplate.vue';
 export default {
   components: {
     Sidebar,
+    IconTemplate,
   },
 };
 </script>

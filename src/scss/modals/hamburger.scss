@@ -28,23 +28,10 @@
 
 .hamburger-modal {
   position: relative;
-  &-close {
+  &__close {
     position: absolute;
     top: 28px;
     left: 25px;
-    width: 32px;
-    height: 32px;
-    background-color: transparent;
-    border: 1px solid transparent;
-    padding: 0;
-
-    &:active,
-    &:focus,
-    &:hover {
-      .close-btn path {
-        stroke: $green;
-      }
-    }
 
     @include phones {
       left: 23px;

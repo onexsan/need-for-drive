@@ -7,10 +7,12 @@
   >
     <div class="hamburger-modal__wrapper">
       <button
-        class="hamburger-modal__close hamburger-modal-close"
+        class="hamburger-modal__close close-btn"
         @click="$bvModal.hide(`hamburger-modal`)"
       >
-        <IconClose />
+        <svg>
+          <use xlink:href="#icon-close"></use>
+        </svg>
       </button>
       <nav class="hamburger-modal__nav hamburger-nav">
         <ul class="hamburger-nav__list">
@@ -32,17 +34,23 @@
         <ul class="socials__list">
           <li class="socials__item">
             <a href="#" class="socials__link">
-              <IconSocialTg />
+              <svg>
+                <use xlink:href="#icon-tg" class="socials__icon"></use>
+              </svg>
             </a>
           </li>
           <li class="socials__item">
             <a href="#" class="socials__link">
-              <IconSocialFb />
+              <svg>
+                <use xlink:href="#icon-fb" class="socials__icon"></use>
+              </svg>
             </a>
           </li>
           <li class="socials__item">
             <a href="#" class="socials__link">
-              <IconSocialIg />
+              <svg>
+                <use xlink:href="#icon-ig" class="socials__icon"></use>
+              </svg>
             </a>
           </li>
         </ul>
@@ -51,18 +59,3 @@
     </div>
   </b-modal>
 </template>
-
-<script>
-import IconSocialTg from '@/components/icons/IconSocialTg.vue';
-import IconSocialIg from '@/components/icons/IconSocialIg.vue';
-import IconSocialFb from '@/components/icons/IconSocialFb.vue';
-import IconClose from '@/components/icons/IconClose.vue';
-export default {
-  components: {
-    IconSocialTg,
-    IconSocialIg,
-    IconSocialFb,
-    IconClose,
-  },
-};
-</script>

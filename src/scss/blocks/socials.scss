@@ -13,16 +13,20 @@
     width: 32px;
     height: 32px;
     display: block;
+    overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+      .socials__icon {
+        color: $green;
+      }
+    }
   }
 
   &__icon {
     width: 100%;
     height: auto;
-    fill: $white;
-
-    &:hover path {
-      fill: $green;
-    }
+    color: $white;
   }
 
   &__item {
