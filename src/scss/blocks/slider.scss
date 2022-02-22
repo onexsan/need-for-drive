@@ -1,0 +1,162 @@
+.slider {
+  width: 100%;
+  height: 100%;
+  background-color: $darkgreen;
+
+  &__controls,
+  &__dots {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  &__dots {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__dot {
+    position: relative;
+    background-color: transparent;
+    border: 1px solid transparent;
+    margin-right: 8px;
+    z-index: 10;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:before {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      background-color: $white;
+      border-radius: 50%;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
+
+    &.active {
+      &:before {
+        background-color: $green;
+      }
+    }
+    &:hover {
+      &:before {
+        background-color: $green;
+      }
+    }
+  }
+
+  &__controls {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__arrow {
+    width: 64px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $white;
+    position: relative;
+
+    z-index: 10;
+
+    &:hover {
+      background-color: rgba(14, 194, 97, 0.2);
+    }
+
+    @include sm-desktops {
+      width: 32px;
+    }
+
+    &:before {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 18px;
+      background-image: url('~@/assets/icons/slider-arrow.svg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
+
+    &:last-child {
+      &:before {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .slide {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &__img {
+      height: 100%;
+      max-height: 811px;
+      width: auto;
+      max-width: 50vw;
+      object-fit: cover;
+    }
+
+    &__content {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      margin: auto 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0px 33px;
+      z-index: 5;
+
+      @include sm-desktops {
+        margin: auto 32px;
+      }
+    }
+
+    &__title {
+      font-weight: 500;
+      font-size: 40px;
+      color: $white;
+      margin-bottom: 8px;
+    }
+
+    &__desc {
+      font-weight: 300;
+      font-size: 24px;
+      margin-bottom: 32px;
+      color: $white;
+    }
+
+    &__btn {
+      max-width: 164px;
+    }
+  }
+}
