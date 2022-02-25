@@ -1,0 +1,21 @@
+.form-group {
+  margin-bottom: 13px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &--radio-list {
+    display: flex;
+    align-items: center;
+  }
+
+  &__radio {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
+}

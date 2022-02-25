@@ -1,9 +1,63 @@
-.custom-input {
+input.form-control {
   border: none;
   border-bottom: 1px solid $gray;
+  border-radius: 0px;
   padding: 3px 7px;
+  font-size: 14px;
 
   @include phones {
     font-size: 12px;
+  }
+  &:focus {
+    border-color: $gray;
+    box-shadow: none;
+  }
+}
+
+.radio {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  font-weight: 300;
+  font-size: 14px;
+  padding-left: 20px;
+  color: $gray;
+
+  &:hover {
+    .radio__icon {
+      border-color: $green;
+    }
+
+    .radio__text {
+      color: $black;
+    }
+  }
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+
+    &:checked ~ .radio__icon {
+      border-color: $green;
+      border-width: 3px;
+    }
+
+    &:checked ~ .radio__text {
+      color: $black;
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    top: 0;
+    left: 0px;
+    bottom: 0;
+    margin: auto 0;
+    height: 12px;
+    width: 12px;
+    background-color: $white;
+    border: 1px solid $gray;
+    border-radius: 50%;
   }
 }
