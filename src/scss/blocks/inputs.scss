@@ -1,0 +1,9 @@
+.custom-input {
+  border: none;
+  border-bottom: 1px solid $gray;
+  padding: 3px 7px;
+
+  @include phones {
+    font-size: 12px;
+  }
+}

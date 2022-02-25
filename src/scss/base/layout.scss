@@ -11,6 +11,7 @@ html,
   grid-template-columns: auto 1fr;
   margin: 0 auto;
   font-family: 'Roboto', Tahoma, Verdana, sans-serif;
+  font-weight: normal;
 
   @include phones {
     display: flex;
@@ -31,6 +32,7 @@ html,
     width: 100%;
     padding-left: 64px;
     padding-right: 64px;
+    max-width: none;
 
     @include sm-desktops {
       padding-left: 32px;
