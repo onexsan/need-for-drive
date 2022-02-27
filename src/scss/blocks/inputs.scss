@@ -61,3 +61,78 @@ input.form-control {
     border-radius: 50%;
   }
 }
+
+/* The container */
+.checkbox {
+  display: block;
+  position: relative;
+  padding-left: 20px;
+  cursor: pointer;
+  font-weight: 300;
+  font-size: 14px;
+  color: $gray;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkbox__icon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto 0;
+  height: 12px;
+  width: 12px;
+  background-color: $white;
+  border: 1px solid $gray;
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox:hover input ~ .checkbox__icon {
+  border-color: $green;
+}
+.checkbox:hover input ~ .checkbox__text {
+  color: $black;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox input:checked ~ .checkbox__icon {
+  border-color: $green;
+}
+.checkbox input:checked ~ .checkbox__text {
+  color: $black;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkbox__icon:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox input:checked ~ .checkbox__icon:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox .checkbox__icon:after {
+  top: 0;
+  bottom: 5px;
+  left: 50%;
+  right: 0;
+  margin: auto;
+  width: 70%;
+  height: 110%;
+  border: solid $black;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
