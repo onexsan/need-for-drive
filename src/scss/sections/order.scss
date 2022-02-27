@@ -2,7 +2,7 @@
   &-main {
     &__wrapper {
       display: grid;
-      grid-template-columns: 3fr 1fr;
+      grid-template-columns: 5fr 2fr;
       gap: 0px;
 
       @include lg-tablets {
@@ -11,13 +11,10 @@
     }
 
     &__form {
-      border-right: 1px solid $lightgray;
       padding: 32px;
       padding-left: 0;
 
       @include lg-tablets {
-        border-right: none;
-        border-bottom: 1px solid $lightgray;
         padding-right: 0;
       }
     }
@@ -25,9 +22,12 @@
     &__details {
       padding: 32px;
       padding-right: 0;
+      border-left: 1px solid $lightgray;
 
       @include lg-tablets {
         padding-left: 0;
+        border: none;
+        border-top: 1px solid $lightgray;
       }
     }
   }
@@ -307,11 +307,19 @@
   &__title {
     font-size: 18px;
     color: $black;
+
+    @include phones {
+      font-size: 16px;
+    }
   }
 
   &__price {
     font-size: 14px;
     color: $gray;
+
+    @include phones {
+      font-size: 12px;
+    }
   }
 
   &__item {
@@ -348,5 +356,73 @@
 
     width: 100%;
     height: auto;
+  }
+}
+
+.order-summary {
+  margin: 32px 0px;
+  position: relative;
+  height: fit-content;
+  width: 80%;
+
+  @include sm-desktops {
+    width: 100%;
+  }
+
+  @include lg-desktops {
+    width: 50%;
+  }
+
+  &__model {
+    font-weight: normal;
+    font-size: 18px;
+    color: $black;
+    margin-bottom: 8px;
+
+    @include phones {
+      font-size: 14px;
+    }
+  }
+
+  &__license {
+    width: fit-content;
+    font-weight: normal;
+    font-size: 14px;
+    color: $black;
+    padding: 4px 8px;
+    border: 1px solid $gray;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  &__extra {
+    color: $black;
+    font-size: 14px;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    span {
+      font-weight: bold;
+    }
+
+    @include phones {
+      font-size: 12px;
+    }
+  }
+
+  &__img {
+    width: 40%;
+    max-width: 256px;
+    height: auto;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    @include lg-desktops {
+      max-width: 550px;
+    }
   }
 }
