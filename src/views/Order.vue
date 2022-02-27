@@ -23,48 +23,7 @@
     <main class="order__main order-main">
       <div class="container order-main__container">
         <div class="order-main__wrapper">
-          <form action="" class="order-main__form order-form">
-            <fieldset>
-              <div
-                class="form-group order-form__form-group order-form__form-group--grid"
-              >
-                <label for="order-city" class="order-form__label">Город</label>
-                <input
-                  type="search"
-                  name="order-city"
-                  id="order-city"
-                  class="custom-input order-form__input"
-                  placeholder="Начните вводить город..."
-                />
-              </div>
-              <div
-                class="form-group order-form__form-group order-form__form-group--grid"
-              >
-                <label for="order-place" class="order-form__label"
-                  >Пункт выдачи</label
-                >
-                <input
-                  type="search"
-                  name="order-place"
-                  id="order-place"
-                  class="custom-input order-form__input"
-                  placeholder="Начните вводить пункт..."
-                />
-              </div>
-            </fieldset>
-            <fieldset>
-              <div class="form-group order-form__form-group">
-                <legend class="order-form__legend">Выбрать на карте:</legend>
-                <div class="order-form__img-placeholder">
-                  <img
-                    src="~@/assets/img/order-map.png"
-                    alt=""
-                    class="order-form__map"
-                  />
-                </div>
-              </div>
-            </fieldset>
-          </form>
+          <StepOne v-show="currentStep === 1" />
           <div class="order-main__details order-details">
             <h3 class="order-details__title">Ваш заказ:</h3>
             <ul class="order-details__list details-list">
@@ -90,9 +49,11 @@
 
 <script>
 import Header from '@/components/layout/Header.vue';
+import StepOne from '@/components/pages/order/StepOne.vue';
 export default {
   components: {
     Header,
+    StepOne,
   },
   data() {
     return {
