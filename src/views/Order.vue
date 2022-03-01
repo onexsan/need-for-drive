@@ -57,11 +57,17 @@
               </li>
             </ul>
             <div class="order-details__price"><span>Цена:</span> 16 000 ₽</div>
-            <button class="btn order-details__btn">Выбрать модель</button>
+            <button
+              class="btn order-details__btn"
+              @click="$bvModal.show(`order-confirmation-modal`)"
+            >
+              Выбрать модель
+            </button>
           </div>
         </div>
       </div>
     </main>
+    <OrderConfirmationModal />
   </section>
 </template>
 
@@ -71,6 +77,7 @@ import StepOne from '@/components/pages/order/StepOne.vue';
 import StepTwo from '@/components/pages/order/StepTwo.vue';
 import StepThree from '@/components/pages/order/StepThree.vue';
 import StepFour from '@/components/pages/order/StepFour.vue';
+import OrderConfirmationModal from '@/components/modals/OrderConfirmationModal.vue';
 export default {
   components: {
     Header,
@@ -78,6 +85,7 @@ export default {
     StepTwo,
     StepThree,
     StepFour,
+    OrderConfirmationModal,
   },
   data() {
     return {
