@@ -15,35 +15,21 @@
         <Footer />
       </div>
       <div class="home__slider">
-        <div class="slider">
-          <div class="slider__slide slide">
-            <img
-              src="~@/assets/img/slide-1.jpg"
-              alt="Slider image"
-              class="slide__img"
-            />
-            <div class="slide__content">
-              <div class="slide__title">Бесплатная парковка</div>
-              <div class="slide__desc">
-                Оставляйте машину на платных городских парковках и разрешенных
-                местах, не нарушая ПДД, а также в аэропортах.
+        <slider class="slider--custom" :autoplay="false" :height="'100%'">
+          <slider-item v-for="slide in slides" :key="slide.id">
+            <div class="slider__slide slide">
+              <div class="slide__content">
+                <div class="slide__title">{{ slide.title }}</div>
+                <div class="slide__desc">
+                  {{ slide.desc }}
+                </div>
+                <a href="#" class="btn btn--color-reverse slide__btn"
+                  >Подробнее</a
+                >
               </div>
-              <a href="#" class="btn btn--color-reverse slide__btn"
-                >Подробнее</a
-              >
             </div>
-          </div>
-        </div>
-        <div class="slider__controls">
-          <button class="slider__arrow slider__arrow--left"></button>
-          <button class="slider__arrow slider__arrow--right"></button>
-        </div>
-        <div class="slider__dots">
-          <button class="slider__dot"></button>
-          <button class="slider__dot active"></button>
-          <button class="slider__dot"></button>
-          <button class="slider__dot"></button>
-        </div>
+          </slider-item>
+        </slider>
       </div>
     </div>
   </section>
@@ -57,6 +43,28 @@ export default {
   components: {
     Header,
     Footer,
+  },
+  data() {
+    return {
+      slides: [
+        {
+          title: 'Бесплатная парковка',
+          desc: 'Оставляйте машину на платных городских парковках и разрешенных местах, не нарушая ПДД, а также в аэропортах.',
+        },
+        {
+          title: 'Страховка',
+          desc: 'Полная страховка автомобиля',
+        },
+        {
+          title: 'Бензин',
+          desc: 'Полный бак на любой заправке города за наш счёт',
+        },
+        {
+          title: 'Обслуживание',
+          desc: 'Автомобиль проходит еженедельное ТО',
+        },
+      ],
+    };
   },
 };
 </script>

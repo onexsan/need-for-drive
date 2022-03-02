@@ -23,20 +23,8 @@
     }
 
     &--color-reverse {
-      background: linear-gradient(90deg, $darkgreen 0%, $green 100%);
-
-      &:hover {
-        background: linear-gradient(90deg, #026e47 2.61%, #0b934a 112.6%);
-        color: $white;
-      }
-      &:active {
-        background: linear-gradient(90deg, #013c27 2.61%, #076432 112.6%);
-        color: $white;
-      }
-      &:focus {
-        background: linear-gradient(90deg, #026e47 2.61%, #0b934a 112.6%);
-        color: $white;
-      }
+      border: none;
+      @include gradient-animation($gradient-green, $gradient-green-dark);
     }
   }
 }
