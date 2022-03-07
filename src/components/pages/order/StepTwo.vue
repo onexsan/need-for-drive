@@ -1,5 +1,5 @@
 <template>
-  <form action="" class="order-main__form order-form">
+  <form class="order-main__form order-form">
     <fieldset>
       <div class="form-group form-group--radio-list order-form__form-group">
         <div class="form-group__radio">
@@ -48,7 +48,7 @@
           <div class="order-models__img-wrapper">
             <img
               src="~@/assets/img/car-example.png"
-              alt=""
+              alt="Изображение автомобиля"
               class="order-models__img"
             />
           </div>
@@ -59,7 +59,7 @@
           <div class="order-models__img-wrapper">
             <img
               src="~@/assets/img/car-example.png"
-              alt=""
+              alt="Изображение автомобиля"
               class="order-models__img"
             />
           </div>
@@ -70,7 +70,7 @@
           <div class="order-models__img-wrapper">
             <img
               src="~@/assets/img/car-example.png"
-              alt=""
+              alt="Изображение автомобиля"
               class="order-models__img"
             />
           </div>
@@ -81,7 +81,7 @@
           <div class="order-models__img-wrapper">
             <img
               src="~@/assets/img/car-example.png"
-              alt=""
+              alt="Изображение автомобиля"
               class="order-models__img"
             />
           </div>
@@ -92,7 +92,7 @@
           <div class="order-models__img-wrapper">
             <img
               src="~@/assets/img/car-example.png"
-              alt=""
+              alt="Изображение автомобиля"
               class="order-models__img"
             />
           </div>
