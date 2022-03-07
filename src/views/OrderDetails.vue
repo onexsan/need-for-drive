@@ -19,7 +19,7 @@
             </div>
             <img
               src="~@/assets/img/car-example.png"
-              alt="Chosen model"
+              alt="Выбранная модель автомобиля"
               class="order-summary__img"
             />
           </div>
