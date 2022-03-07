@@ -27,3 +27,37 @@
     @content;
   }
 }
+
+@mixin gradient-animation($gradient-one, $gradient-two) {
+  background-size: 100%;
+  background-image: linear-gradient(
+    90deg,
+    $gradient-two 0%,
+    $gradient-one 100%
+  );
+  position: relative;
+  z-index: 10;
+  &:before {
+    background-image: linear-gradient(
+      90deg,
+      $gradient-one 0%,
+      $gradient-two 100%
+    );
+    content: '';
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    z-index: -10;
+    transition: opacity 1000ms;
+    border-radius: 0.25rem;
+  }
+  &:hover {
+    &:before {
+      opacity: 1;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <form action="" class="order-main__form order-form">
+  <form class="order-main__form order-form">
     <fieldset>
       <div
         class="form-group order-form__form-group order-form__form-group--grid"
@@ -28,7 +28,7 @@
         <div class="order-form__img-placeholder">
           <img
             src="~@/assets/img/order-map.png"
-            alt=""
+            alt="Карта пунктов выдачи"
             class="order-form__map"
           />
         </div>

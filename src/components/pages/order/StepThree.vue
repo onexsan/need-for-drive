@@ -1,5 +1,5 @@
 <template>
-  <form action="" class="order-main__form order-form">
+  <form class="order-main__form order-form">
     <fieldset>
       <legend class="order-form__legend">Цвет</legend>
       <div class="form-group form-group--radio-list order-form__form-group">
