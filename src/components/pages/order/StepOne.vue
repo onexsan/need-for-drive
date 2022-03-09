@@ -11,6 +11,7 @@
           id="order-city"
           class="custom-input order-form__input form-control"
           placeholder="Начните вводить город..."
+          v-model="stepOne.city"
         />
         <label for="order-place" class="order-form__label">Пункт выдачи</label>
         <input
@@ -19,6 +20,7 @@
           id="order-place"
           class="custom-input order-form__input form-control"
           placeholder="Начните вводить пункт..."
+          v-model="stepOne.place"
         />
       </div>
     </fieldset>
@@ -36,3 +38,39 @@
     </fieldset>
   </form>
 </template>
+
+<script>
+import { required } from 'vuelidate/lib/validators';
+export default {
+  data() {
+    return {
+      stepOne: {
+        city: '',
+        place: '',
+      },
+    };
+  },
+  computed: {
+    isFormFilled() {
+      return this.$v.form;
+    },
+  },
+  validations: {
+    form: function () {
+      return required(this.stepOne.city) && required(this.stepOne.place);
+    },
+  },
+  watch: {
+    stepOne: {
+      handler: function (val) {
+        this.$emit('changeFormData', {
+          formStatus: this.isFormFilled,
+          formDetails: val,
+          step: 1,
+        });
+      },
+      deep: true,
+    },
+  },
+};
+</script>

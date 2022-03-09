@@ -77,7 +77,16 @@
   &__item {
     position: relative;
     margin-right: 38px;
-    cursor: pointer;
+    pointer-events: none;
+
+    .order-nav__link {
+      pointer-events: none;
+      color: $gray;
+
+      &:hover {
+        color: $gray;
+      }
+    }
 
     &:after {
       content: '▶';
@@ -101,20 +110,24 @@
       }
     }
 
-    &--active {
-      .order-nav__link {
-        color: $green;
-      }
-    }
-    &--disabled {
-      pointer-events: none;
+    &--allowed {
+      cursor: pointer;
+      pointer-events: auto;
+
       .order-nav__link {
         pointer-events: none;
-        color: $gray;
+        color: $black;
 
         &:hover {
-          color: $gray;
+          color: $green;
         }
+      }
+    }
+
+    &--active {
+      pointer-events: auto;
+      .order-nav__link {
+        color: $green;
       }
     }
   }
@@ -209,6 +222,12 @@
 }
 
 .order-details {
+  &__error {
+    color: darkred;
+    font-size: 12px;
+    margin-top: 20px;
+  }
+
   &__title {
     font-weight: 600;
     font-size: 18px;

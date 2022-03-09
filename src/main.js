@@ -10,6 +10,9 @@ Vue.use(BootstrapVue);
 import EasySlider from 'vue-easy-slider';
 Vue.use(EasySlider);
 
+import Vuelidate from 'vuelidate';
+Vue.use(Vuelidate);
+
 Vue.config.productionTip = false;
 
 new Vue({
