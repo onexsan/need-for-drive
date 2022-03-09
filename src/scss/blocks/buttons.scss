@@ -3,6 +3,7 @@
     padding: 11px 15px;
     background: linear-gradient(90deg, $green 2.61%, $darkgreen 112.6%);
     color: $white;
+    border: none;
 
     &:hover {
       background: linear-gradient(90deg, #0b934a 2.61%, #026e47 112.6%);
@@ -14,6 +15,10 @@
     }
     &:focus {
       background: linear-gradient(90deg, #0b934a 2.61%, #026e47 112.6%);
+      color: $white;
+    }
+    &:disabled {
+      background: $lightgray;
       color: $white;
     }
 
