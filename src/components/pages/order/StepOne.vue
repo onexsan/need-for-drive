@@ -9,7 +9,7 @@
           type="search"
           name="order-city"
           id="order-city"
-          class="custom-input order-form__input"
+          class="custom-input order-form__input form-control"
           placeholder="Начните вводить город..."
         />
         <label for="order-place" class="order-form__label">Пункт выдачи</label>
@@ -17,7 +17,7 @@
           type="search"
           name="order-place"
           id="order-place"
-          class="custom-input order-form__input"
+          class="custom-input order-form__input form-control"
           placeholder="Начните вводить пункт..."
         />
       </div>

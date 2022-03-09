@@ -69,6 +69,7 @@
   &__item {
     position: relative;
     margin-right: 38px;
+    cursor: pointer;
 
     &:after {
       content: '▶';
@@ -98,6 +99,7 @@
       }
     }
     &--disabled {
+      pointer-events: none;
       .order-steps__link {
         pointer-events: none;
         color: $gray;
@@ -287,5 +289,64 @@
         max-width: 35%;
       }
     }
+  }
+}
+
+.order-models {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+
+  @include phones {
+    grid-template-columns: 1fr;
+  }
+
+  &__title {
+    font-size: 18px;
+    color: $black;
+  }
+
+  &__price {
+    font-size: 14px;
+    color: $gray;
+  }
+
+  &__item {
+    padding: 16px;
+    position: relative;
+    min-height: 225px;
+    border: 1px solid $lightgray;
+    cursor: pointer;
+
+    &:hover {
+      border: 1px solid $gray;
+    }
+
+    &--active {
+      border: 1px solid $green;
+
+      &:hover {
+        .order-models__title {
+          color: $black;
+        }
+      }
+    }
+  }
+
+  &__img {
+    &-wrapper {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 80%;
+      max-width: 256px;
+      height: auto;
+    }
+
+    width: 100%;
+    height: auto;
   }
 }
