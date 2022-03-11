@@ -25,6 +25,7 @@
           <StepOne v-show="currentStep === 1" />
           <StepTwo v-show="currentStep === 2" />
           <StepThree v-show="currentStep === 3" />
+          <StepFour v-show="currentStep === 4" />
           <div class="order-main__details order-details">
             <h3 class="order-details__title">Ваш заказ:</h3>
             <ul class="order-details__list details-list">
@@ -56,11 +57,17 @@
               </li>
             </ul>
             <div class="order-details__price"><span>Цена:</span> 16 000 ₽</div>
-            <button class="btn order-details__btn">Выбрать модель</button>
+            <button
+              class="btn order-details__btn"
+              @click="$bvModal.show(`order-confirmation-modal`)"
+            >
+              Выбрать модель
+            </button>
           </div>
         </div>
       </div>
     </main>
+    <OrderConfirmationModal />
   </section>
 </template>
 
@@ -69,12 +76,17 @@ import Header from '@/components/layout/Header.vue';
 import StepOne from '@/components/pages/order/StepOne.vue';
 import StepTwo from '@/components/pages/order/StepTwo.vue';
 import StepThree from '@/components/pages/order/StepThree.vue';
+import StepFour from '@/components/pages/order/StepFour.vue';
+import OrderConfirmationModal from '@/components/modals/OrderConfirmationModal.vue';
+
 export default {
   components: {
     Header,
     StepOne,
     StepTwo,
     StepThree,
+    StepFour,
+    OrderConfirmationModal,
   },
   data() {
     return {

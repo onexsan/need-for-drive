@@ -23,6 +23,10 @@ input.form-control {
   padding-left: 20px;
   color: $gray;
 
+  @include phones {
+    font-size: 12px;
+  }
+
   &:hover {
     .radio__icon {
       border-color: $green;
@@ -71,6 +75,10 @@ input.form-control {
   font-size: 14px;
   color: $gray;
 
+  @include phones {
+    font-size: 12px;
+  }
+  
   &__input {
     position: absolute;
     opacity: 0;
