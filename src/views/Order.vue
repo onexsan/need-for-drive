@@ -162,6 +162,7 @@
 import Header from '@/components/layout/Header.vue';
 import OrderStep from '@/components/pages/order/OrderStep.vue';
 import OrderConfirmationModal from '@/components/modals/OrderConfirmationModal.vue';
+
 export default {
   components: {
     Header,
