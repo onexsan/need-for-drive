@@ -17,7 +17,7 @@
 }
 
 @mixin lg-desktops {
-  @media screen and (max-width: $lg-desktops) {
+  @media screen and (min-width: $lg-desktops) {
     @content;
   }
 }
