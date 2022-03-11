@@ -4,18 +4,25 @@
     margin-bottom: 0;
   }
 
-  &--radio-list {
+  &.form-group--radio-list {
     display: flex;
     align-items: center;
+
+    .form-group__radio {
+      margin-bottom: 0;
+    }
   }
 
-  &__radio {
+  &__radio,
+  &__checkbox {
     display: flex;
     align-items: center;
     margin-right: 16px;
+    margin-bottom: 8px;
 
     &:last-child {
       margin-right: 0px;
+      margin-bottom: 0;
     }
   }
 }
