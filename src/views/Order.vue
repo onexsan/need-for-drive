@@ -78,6 +78,7 @@ import StepTwo from '@/components/pages/order/StepTwo.vue';
 import StepThree from '@/components/pages/order/StepThree.vue';
 import StepFour from '@/components/pages/order/StepFour.vue';
 import OrderConfirmationModal from '@/components/modals/OrderConfirmationModal.vue';
+
 export default {
   components: {
     Header,
