@@ -229,5 +229,27 @@ export default {
       }
     },
   },
+  async mounted() {
+    const token = Buffer.from(`11d7c9f` + ':' + `4cbcea96de`).toString(
+      'base64'
+    );
+    try {
+      let request = await this.axios({
+        method: 'post',
+        url: '/auth/login',
+        data: {
+          username: 'intern',
+          password: 'intern-S!',
+        },
+        headers: {
+          Authorization: `Basic ${token}`,
+        },
+      });
+
+      console.log(request);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 </script>

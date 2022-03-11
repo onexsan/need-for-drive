@@ -13,6 +13,20 @@ Vue.use(EasySlider);
 import Vuelidate from 'vuelidate';
 Vue.use(Vuelidate);
 
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+
+axios.defaults.baseURL = `http://api-factory.simbirsoft1.com/api`;
+axios.defaults.headers.common['X-Api-Factory-Application-Id'] =
+  '5e25c641099b810b946c5d5b';
+
+Vue.use(VueAxios, axios);
+
+const token = localStorage.getItem('token');
+if (token) {
+  axios.defaults.headers.common['Authorization'] = token;
+}
+
 Vue.config.productionTip = false;
 
 new Vue({
