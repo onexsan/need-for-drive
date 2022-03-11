@@ -16,7 +16,7 @@ Vue.use(Vuelidate);
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 
-axios.defaults.baseURL = `http://api-factory.simbirsoft1.com/api`;
+axios.defaults.baseURL = `https://api-factory.simbirsoft1.com/api`;
 axios.defaults.headers.common['X-Api-Factory-Application-Id'] =
   '5e25c641099b810b946c5d5b';
 
