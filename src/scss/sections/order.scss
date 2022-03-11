@@ -181,14 +181,14 @@
   }
 
   fieldset {
-    margin-bottom: 45px;
+    margin-bottom: 32px;
 
     &:last-child {
       margin-bottom: 0;
     }
 
     @include lg-tablets {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
   }
 }

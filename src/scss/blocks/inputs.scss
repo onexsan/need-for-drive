@@ -61,3 +61,71 @@ input.form-control {
     border-radius: 50%;
   }
 }
+
+.checkbox {
+  display: block;
+  position: relative;
+  padding-left: 20px;
+  cursor: pointer;
+  font-weight: 300;
+  font-size: 14px;
+  color: $gray;
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  &__icon {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto 0;
+    height: 12px;
+    width: 12px;
+    background-color: $white;
+    border: 1px solid $gray;
+
+    &:after {
+      content: '';
+      position: absolute;
+      display: none;
+      top: 0;
+      bottom: 55%;
+      left: 45%;
+      right: 0;
+      margin: auto;
+      width: 70%;
+      height: 110%;
+      border: solid $black;
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
+  }
+
+  &:hover {
+    .checkbox__icon {
+      border-color: $green;
+    }
+
+    .checkbox__text {
+      color: $black;
+    }
+  }
+
+  .checkbox__input:checked ~ .checkbox__icon {
+    border-color: $green;
+  }
+
+  .checkbox__input:checked ~ .checkbox__text {
+    color: $black;
+  }
+
+  .checkbox__input:checked ~ .checkbox__icon:after {
+    display: block;
+  }
+}
