@@ -1,39 +1,26 @@
 <template>
   <form class="order-main__form order-form">
     <fieldset>
-      <div
-        class="form-group order-form__form-group order-form__form-group--grid"
-      >
-        <label for="order-city" class="order-form__label">Город</label>
-        <input
-          type="search"
-          name="order-city"
-          id="order-city"
-          class="custom-input order-form__input form-control"
-          placeholder="Начните вводить город..."
-          v-model="stepOne.city"
+      <div class="form-group order-form__form-group">
+        <SearchAutocomplete
+          inputID="order-city"
+          inputLabel="Город"
+          :items="cities"
+          @updData="updData"
         />
-        <label for="order-place" class="order-form__label">Пункт выдачи</label>
-        <input
-          type="search"
-          name="order-place"
-          id="order-place"
-          class="custom-input order-form__input form-control"
-          placeholder="Начните вводить пункт..."
-          v-model="stepOne.place"
+        <SearchAutocomplete
+          inputID="order-place"
+          inputLabel="Пункт выдачи"
+          :items="filteredPoints"
+          @updData="updData"
+          :disabled="isPointDisabled"
         />
       </div>
     </fieldset>
     <fieldset>
       <div class="form-group order-form__form-group">
         <legend class="order-form__legend">Выбрать на карте:</legend>
-        <div class="order-form__img-placeholder">
-          <img
-            src="~@/assets/img/order-map.png"
-            alt="Карта пунктов выдачи"
-            class="order-form__map"
-          />
-        </div>
+        <Map :allMarkers="allMarkers" />
       </div>
     </fieldset>
   </form>
@@ -41,6 +28,10 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators';
+import { mapState } from 'vuex';
+import SearchAutocomplete from '@/components/common/SearchAutocomplete.vue';
+import Map from '@/components/common/Map.vue';
+
 export default {
   data() {
     return {
@@ -48,11 +39,50 @@ export default {
         city: '',
         place: '',
       },
+      filteredPoints: [],
     };
   },
   computed: {
+    ...mapState(['cities', 'points']),
     isFormFilled() {
       return this.$v.form;
+    },
+    isPointDisabled() {
+      if (
+        this.stepOne.city === '' ||
+        (this.stepOne.city && Object.keys(this.stepOne.city).length === 0)
+      ) {
+        return true;
+      }
+      return false;
+    },
+    address() {
+      if (this.stepOne.city && this.stepOne.place) {
+        return `${this.stepOne.city.name} ${this.stepOne.place.address}`;
+      }
+      return null;
+    },
+    allMarkers() {
+      if (this.points) {
+        return this.points
+          .map(function (el) {
+            if (el.cityId !== null) {
+              return `${el.cityId.name} ${el.address}`;
+            }
+          })
+          .filter((el) => el !== undefined);
+      }
+      return null;
+    },
+  },
+  methods: {
+    updData(data) {
+      if (data.type === 'Город') {
+        this.stepOne.city = data.value;
+      }
+      if (data.type === 'Пункт выдачи') {
+        this.stepOne.place = data.value;
+      }
     },
   },
   validations: {
@@ -63,6 +93,16 @@ export default {
   watch: {
     stepOne: {
       handler: function (val) {
+        let city = val.city.name;
+        if (city && city !== undefined) {
+          let filteredPoints = this.points.filter(
+            (el) => el.cityId !== null && el.cityId.name === city
+          );
+          this.filteredPoints = filteredPoints;
+        } else {
+          this.filteredPoints = [];
+        }
+
         this.$emit('changeFormData', {
           formStatus: this.isFormFilled,
           formDetails: val,
@@ -71,6 +111,10 @@ export default {
       },
       deep: true,
     },
+  },
+  components: {
+    SearchAutocomplete,
+    Map,
   },
 };
 </script>

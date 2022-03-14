@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import router from './router';
+import store from './store';
 import App from './App.vue';
 
 import { BootstrapVue } from 'bootstrap-vue';
@@ -16,20 +17,26 @@ Vue.use(Vuelidate);
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 
-axios.defaults.baseURL = `https://api-factory.simbirsoft1.com/api`;
-axios.defaults.headers.common['X-Api-Factory-Application-Id'] =
-  '5e25c641099b810b946c5d5b';
-
 Vue.use(VueAxios, axios);
 
-const token = localStorage.getItem('token');
-if (token) {
-  axios.defaults.headers.common['Authorization'] = token;
-}
+axios.defaults.baseURL = `https://api-factory.simbirsoft1.com/api`;
+axios.defaults.headers.common['X-Api-Factory-Application-Id'] =
+  process.env.VUE_APP_APPLICATION_ID;
+
+import YmapPlugin from 'vue-yandex-maps';
+const ySettings = {
+  apiKey: process.env.VUE_APP_YMAPS_APIKEY,
+  lang: 'ru_RU',
+  coordorder: 'latlong',
+  enterprise: false,
+  version: '2.1',
+};
+Vue.use(YmapPlugin, ySettings);
 
 Vue.config.productionTip = false;
 
 new Vue({
   router,
+  store,
   render: (h) => h(App),
 }).$mount('#app');

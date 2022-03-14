@@ -50,7 +50,7 @@
                 >
                   <div class="details-item__title">Пункт выдачи</div>
                   <div class="details-item__value">
-                    {{ formDetails.city }}, {{ formDetails.place }}
+                    {{ formDetails.city.name }}, {{ formDetails.place.address }}
                   </div>
                 </li>
                 <li
@@ -191,6 +191,8 @@ export default {
         2: false,
         3: false,
       },
+      cities: [],
+      points: [],
     };
   },
   computed: {
@@ -230,26 +232,8 @@ export default {
     },
   },
   async mounted() {
-    const token = Buffer.from(`11d7c9f` + ':' + `4cbcea96de`).toString(
-      'base64'
-    );
-    try {
-      let request = await this.axios({
-        method: 'post',
-        url: '/auth/login',
-        data: {
-          username: 'intern',
-          password: 'intern-S!',
-        },
-        headers: {
-          Authorization: `Basic ${token}`,
-        },
-      });
-
-      console.log(request);
-    } catch (error) {
-      console.log(error);
-    }
+    await this.$store.dispatch('getCities');
+    await this.$store.dispatch('getPoints');
   },
 };
 </script>
