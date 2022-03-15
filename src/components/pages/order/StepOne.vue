@@ -63,10 +63,20 @@ export default {
   watch: {
     stepOne: {
       handler: function (val) {
-        this.$emit('changeFormData', {
-          formStatus: this.isFormFilled,
-          formDetails: val,
+        let city = val.city.name;
+        if (city && city !== undefined) {
+          let filteredPoints = this.stepOneData.points.filter(
+            (el) => el.cityId !== null && el.cityId.name === city
+          );
+          this.filteredPoints = filteredPoints;
+        } else {
+          this.filteredPoints = [];
+        }
+
+        this.$store.commit('upd_order_details', val);
+        this.$store.commit('upd_steps', {
           step: 1,
+          formStatus: this.isFormFilled,
         });
       },
       deep: true,

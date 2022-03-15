@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import router from './router';
+import store from './store';
 import App from './App.vue';
 
 import { BootstrapVue } from 'bootstrap-vue';
@@ -13,9 +14,19 @@ Vue.use(EasySlider);
 import Vuelidate from 'vuelidate';
 Vue.use(Vuelidate);
 
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+
+Vue.use(VueAxios, axios);
+
+axios.defaults.baseURL = `https://api-factory.simbirsoft1.com/api`;
+axios.defaults.headers.common['X-Api-Factory-Application-Id'] =
+  process.env.VUE_APP_APPLICATION_ID;
+
 Vue.config.productionTip = false;
 
 new Vue({
   router,
+  store,
   render: (h) => h(App),
 }).$mount('#app');
