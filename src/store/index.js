@@ -13,6 +13,7 @@ export default new Vuex.Store({
     cars: {
       status: '',
       list: [],
+      categories: [],
     },
     stepOneData: {
       cities: [],
@@ -51,6 +52,9 @@ export default new Vuex.Store({
     },
     upd_cars(state, payload) {
       state.cars.list = payload;
+    },
+    upd_categories(state, payload) {
+      state.cars.categories = payload;
     },
     upd_order_details(state, payload) {
       let merged = { ...state.orderDetails, ...payload };
@@ -124,6 +128,15 @@ export default new Vuex.Store({
         });
         if (cars.data.data) {
           commit('upd_cars', cars.data.data);
+        }
+
+        let category = await axios({
+          method: 'get',
+          url: '/db/category',
+        });
+
+        if (category.data.data) {
+          commit('upd_categories', category.data.data);
         }
       } catch (error) {
         console.log(error);

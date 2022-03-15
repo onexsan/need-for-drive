@@ -1,79 +1,73 @@
 <template>
   <form class="order-main__form order-form">
-    <fieldset>
-      <div class="form-group form-group--radio-list order-form__form-group">
-        <div class="form-group__radio">
-          <label class="radio" for="all-models">
-            <input
-              type="radio"
-              class="radio__input"
-              name="models"
-              id="all-models"
-              :value="1"
-              v-model="filter"
-            />
-            <span class="radio__text">Все модели</span>
-            <span class="radio__icon"></span>
-          </label>
-        </div>
-        <div class="form-group__radio">
-          <label class="radio" for="economy-models">
-            <input
-              type="radio"
-              class="radio__input"
-              name="models"
-              id="economy-models"
-              :value="2"
-              v-model="filter"
-            />
-            <span class="radio__text">Эконом</span>
-            <span class="radio__icon"></span>
-          </label>
-        </div>
-        <div class="form-group__radio">
-          <label class="radio" for="premium-models">
-            <input
-              type="radio"
-              class="radio__input"
-              name="models"
-              id="premium-models"
-              :value="3"
-              v-model="filter"
-            />
-            <span class="radio__text">Премиум</span>
-            <span class="radio__icon"></span>
-          </label>
-        </div>
-      </div>
-    </fieldset>
     <Loader v-if="cars.status === 'loading'" />
-    <fieldset v-else>
-      <ul class="order-form__models order-models">
-        <li
-          class="order-models__item"
-          :class="{
-            'order-models__item--active': stepTwo.chosenModel.id === item.id,
-          }"
-          v-for="item in carsList"
-          :key="item.id"
-          @click.prevent="pickModel(item.id)"
-        >
-          <div class="order-models__title">{{ item.name }}</div>
-          <div class="order-models__price">
-            {{ item.priceMin }} - {{ item.priceMax }} ₽
+    <template v-else>
+      <fieldset>
+        <div class="form-group form-group--radio-list order-form__form-group">
+          <div class="form-group__radio">
+            <label class="radio" for="all-models">
+              <input
+                type="radio"
+                class="radio__input"
+                name="models"
+                id="all-models"
+                :value="1"
+                v-model="filter"
+              />
+              <span class="radio__text">Все модели</span>
+              <span class="radio__icon"></span>
+            </label>
           </div>
-          <div class="order-models__img-wrapper">
-            <img
-              v-image-fall-back
-              v-if="item.thumbnail.path"
-              :src="item.thumbnail.path"
-              :alt="item.name"
-              class="order-models__img"
-            />
-          </div>
-        </li>
-      </ul>
-    </fieldset>
+          <template v-if="cars && cars.categories">
+            <div
+              class="form-group__radio"
+              v-for="item in cars.categories"
+              :key="item.id"
+            >
+              <label class="radio" :for="item.name">
+                <input
+                  type="radio"
+                  class="radio__input"
+                  name="models"
+                  :id="item.name"
+                  :value="item.name"
+                  v-model="filter"
+                />
+                <span class="radio__text">{{ item.name }}</span>
+                <span class="radio__icon"></span>
+              </label>
+            </div>
+          </template>
+        </div>
+      </fieldset>
+      <fieldset>
+        <ul class="order-form__models order-models">
+          <li
+            class="order-models__item"
+            :class="{
+              'order-models__item--active': stepTwo.chosenModel.id === item.id,
+            }"
+            v-for="item in carsList"
+            :key="item.id"
+            @click.prevent="pickModel(item.id)"
+          >
+            <div class="order-models__title">{{ item.name }}</div>
+            <div class="order-models__price">
+              {{ item.priceMin }} - {{ item.priceMax }} ₽
+            </div>
+            <div class="order-models__img-wrapper">
+              <img
+                v-image-fall-back
+                v-if="item.thumbnail.path"
+                :src="item.thumbnail.path"
+                :alt="item.name"
+                class="order-models__img"
+              />
+            </div>
+          </li>
+        </ul>
+      </fieldset>
+    </template>
   </form>
 </template>
 
@@ -142,15 +136,17 @@ export default {
     },
     filter: {
       handler: function (val) {
-        if (val === 1) {
-          this.carsList = this.cars.list;
-        } else if (val === 2) {
-          this.carsList = this.economyCars;
-        } else if (val === 3) {
-          this.carsList = this.premiumCars;
+        if (val !== undefined) {
+          if (val === 1) {
+            this.carsList = this.cars.list;
+          } else {
+            let cars = this.cars.list.filter(
+              (el) => el.categoryId.name === val
+            );
+            this.carsList = cars;
+          }
         }
       },
-      immediate: true,
     },
   },
   components: { Loader },
