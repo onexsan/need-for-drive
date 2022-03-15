@@ -31,9 +31,17 @@
       }
     }
   }
+
+  &--confirmed {
+    .order-summary__img {
+      top: 0;
+      bottom: 0;
+      margin: auto 0;
+    }
+  }
 }
 
-.order-steps {
+.order-nav {
   border: 1px solid $lightgray;
   border-right: none;
   border-left: none;
@@ -94,13 +102,13 @@
     }
 
     &--active {
-      .order-steps__link {
+      .order-nav__link {
         color: $green;
       }
     }
     &--disabled {
       pointer-events: none;
-      .order-steps__link {
+      .order-nav__link {
         pointer-events: none;
         color: $gray;
 
@@ -124,6 +132,13 @@
     @include phones {
       font-size: 12px;
     }
+  }
+
+  &__order-id {
+    font-weight: bold;
+    font-size: 14px;
+    padding: 8px 0px;
+    margin-bottom: 0;
   }
 }
 
@@ -371,6 +386,17 @@
 
   @include lg-desktops {
     width: 50%;
+  }
+
+  &__title {
+    font-weight: normal;
+    font-size: 24px;
+    color: $black;
+    margin-bottom: 16px;
+
+    @include phones {
+      font-size: 18px;
+    }
   }
 
   &__model {

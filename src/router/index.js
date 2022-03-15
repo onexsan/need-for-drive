@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Order from '../views/Order.vue';
+import OrderDetails from '../views/OrderDetails.vue';
 
 Vue.use(VueRouter);
 
@@ -18,6 +19,14 @@ const routes = [
     path: '/order/',
     name: 'Order',
     component: Order,
+    meta: {
+      title: 'Need For Drive',
+    },
+  },
+  {
+    path: '/order-details/',
+    name: 'OrderDetails',
+    component: OrderDetails,
     meta: {
       title: 'Need For Drive',
     },
