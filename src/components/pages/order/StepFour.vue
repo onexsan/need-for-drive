@@ -1,24 +1,32 @@
 <template>
   <div class="order__summary order-summary">
-    <div class="order-summary__model" v-if="filledForm.model">
-      {{ filledForm.model }}
+    <div class="order-summary__model" v-if="orderDetails.name">
+      {{ orderDetails.name }}
     </div>
     <div class="order-summary__license">K 761 HA 73</div>
-    <div class="order-summary__extra" v-if="filledForm.extraFuel === true">
+    <div class="order-summary__extra" v-if="orderDetails.extraFuel === true">
       <span>Топливо</span> 100%
     </div>
-    <div class="order-summary__extra" v-if="filledForm.extraBabyChair === true">
+    <div
+      class="order-summary__extra"
+      v-if="orderDetails.extraBabyChair === true"
+    >
       С <span>детским креслом</span>
     </div>
-    <div class="order-summary__extra" v-if="filledForm.extraRightSide === true">
+    <div
+      class="order-summary__extra"
+      v-if="orderDetails.extraRightSide === true"
+    >
       С <span>правым рулём</span>
     </div>
-    <div class="order-summary__extra" v-if="filledForm.dateFrom">
+    <div class="order-summary__extra" v-if="orderDetails.dateFrom">
       <span>Доступна</span> с
-      {{ filledForm.dateFrom.split('-').reverse().join('.') }}
+      {{ orderDetails.dateFrom.split('-').reverse().join('.') }}
     </div>
     <img
-      src="~@/assets/img/car-example.png"
+      v-image-fall-back
+      v-if="orderDetails.thumbnail && orderDetails.thumbnail.path"
+      :src="orderDetails.thumbnail.path"
       alt="Выбранная модель автомобиля"
       class="order-summary__img"
     />
@@ -26,7 +34,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
-  props: ['filledForm'],
+  computed: {
+    ...mapState(['orderDetails']),
+  },
 };
 </script>

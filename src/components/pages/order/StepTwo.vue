@@ -64,8 +64,8 @@
           </div>
           <div class="order-models__img-wrapper">
             <img
-              v-if="item.thumbnail.path"
               v-image-fall-back
+              v-if="item.thumbnail.path"
               :src="item.thumbnail.path"
               :alt="item.name"
               class="order-models__img"
@@ -125,10 +125,10 @@ export default {
   },
   watch: {
     'stepTwo.chosenModel': function (val) {
-      this.$emit('changeFormData', {
-        formStatus: !this.$v.stepTwo.chosenModel.$invalid,
-        formDetails: val,
+      this.$store.commit('upd_order_details', val);
+      this.$store.commit('upd_steps', {
         step: 2,
+        formStatus: !this.$v.stepTwo.chosenModel.$invalid,
       });
     },
     cars: {

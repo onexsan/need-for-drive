@@ -117,10 +117,10 @@ export default {
           this.filteredPoints = [];
         }
 
-        this.$emit('changeFormData', {
-          formStatus: this.isFormFilled,
-          formDetails: val,
+        this.$store.commit('upd_order_details', val);
+        this.$store.commit('upd_steps', {
           step: 1,
+          formStatus: this.isFormFilled,
         });
       },
       deep: true,
