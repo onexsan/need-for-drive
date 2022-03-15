@@ -187,10 +187,10 @@ export default {
     stepThree: {
       deep: true,
       handler(val) {
-        this.$emit('changeFormData', {
-          formStatus: this.isFormFilled,
-          formDetails: val,
+        this.$store.commit('upd_order_details', val);
+        this.$store.commit('upd_steps', {
           step: 3,
+          formStatus: this.isFormFilled,
         });
       },
     },

@@ -15,6 +15,12 @@ export default new Vuex.Store({
       points: [],
       status: '',
     },
+    orderDetails: {},
+    stepsCompleted: {
+      1: false,
+      2: false,
+      3: false,
+    },
   },
   mutations: {
     start_loading(state, payload) {
@@ -38,6 +44,13 @@ export default new Vuex.Store({
     },
     upd_points(state, payload) {
       state.stepOneData.points = payload;
+    },
+    upd_order_details(state, payload) {
+      let merged = { ...state.orderDetails, ...payload };
+      state.orderDetails = merged;
+    },
+    upd_steps(state, payload) {
+      state.stepsCompleted[payload.step] = payload.formStatus;
     },
   },
   actions: {
