@@ -1,22 +1,25 @@
 <template>
   <form class="order-main__form order-form">
-    <fieldset>
-      <div class="form-group order-form__form-group">
-        <SearchAutocomplete
-          inputID="order-city"
-          inputLabel="Город"
-          :items="cities"
-          @updData="updData"
-        />
-        <SearchAutocomplete
-          inputID="order-place"
-          inputLabel="Пункт выдачи"
-          :items="filteredPoints"
-          @updData="updData"
-          :disabled="isPointDisabled"
-        />
-      </div>
-    </fieldset>
+    <Loader v-if="stepOneData.status === 'loading'" />
+    <template v-else>
+      <fieldset>
+        <div class="form-group order-form__form-group">
+          <SearchAutocomplete
+            inputID="order-city"
+            inputLabel="Город"
+            :items="filteredCities"
+            @updData="updData"
+          />
+          <SearchAutocomplete
+            inputID="order-place"
+            inputLabel="Пункт выдачи"
+            :items="filteredPoints"
+            @updData="updData"
+            :disabled="isPointDisabled"
+          />
+        </div>
+      </fieldset>
+    </template>
     <fieldset>
       <div class="form-group order-form__form-group">
         <legend class="order-form__legend">Выбрать на карте:</legend>
@@ -30,6 +33,7 @@
 import { required } from 'vuelidate/lib/validators';
 import { mapState } from 'vuex';
 import SearchAutocomplete from '@/components/common/SearchAutocomplete.vue';
+import Loader from '@/components/common/Loader.vue';
 import Map from '@/components/common/Map.vue';
 
 export default {
@@ -43,7 +47,23 @@ export default {
     };
   },
   computed: {
-    ...mapState(['cities', 'points']),
+    ...mapState(['stepOneData']),
+    filteredCities() {
+      if (this.stepOneData.cities && this.stepOneData.points) {
+        let arrayOfCities = [];
+        for (let item of this.stepOneData.cities) {
+          let pwz = this.stepOneData.points.find(
+            (el) => el.cityId !== null && el.cityId.name === item.name
+          );
+
+          if (pwz !== undefined) {
+            arrayOfCities.push(item);
+          }
+        }
+        return arrayOfCities;
+      }
+      return null;
+    },
     isFormFilled() {
       return this.$v.form;
     },
@@ -56,15 +76,9 @@ export default {
       }
       return false;
     },
-    address() {
-      if (this.stepOne.city && this.stepOne.place) {
-        return `${this.stepOne.city.name} ${this.stepOne.place.address}`;
-      }
-      return null;
-    },
     allMarkers() {
-      if (this.points) {
-        return this.points
+      if (this.stepOneData.points) {
+        return this.stepOneData.points
           .map(function (el) {
             if (el.cityId !== null) {
               return `${el.cityId.name} ${el.address}`;
@@ -95,7 +109,7 @@ export default {
       handler: function (val) {
         let city = val.city.name;
         if (city && city !== undefined) {
-          let filteredPoints = this.points.filter(
+          let filteredPoints = this.stepOneData.points.filter(
             (el) => el.cityId !== null && el.cityId.name === city
           );
           this.filteredPoints = filteredPoints;
@@ -115,6 +129,7 @@ export default {
   components: {
     SearchAutocomplete,
     Map,
+    Loader,
   },
 };
 </script>

@@ -6,32 +6,43 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    status: '',
+    auth: {
+      status: '',
+    },
     token: localStorage.getItem('token') || '',
-    cities: [],
-    points: [],
+    stepOneData: {
+      cities: [],
+      points: [],
+      status: '',
+    },
   },
   mutations: {
-    auth_request(state) {
-      state.status = 'loading';
+    start_loading(state, payload) {
+      let block = state[payload];
+      block.status = 'loading';
+    },
+    finish_loading(state, payload) {
+      let block = state[payload];
+      block.status = '';
+    },
+    error_loading(state, payload) {
+      let block = state[payload];
+      block.status = 'error';
     },
     auth_success(state, token) {
-      state.status = 'success';
+      state.auth.status = 'success';
       state.token = token;
     },
-    auth_error(state) {
-      state.status = 'error';
-    },
     upd_cities(state, payload) {
-      state.cities = payload;
+      state.stepOneData.cities = payload;
     },
     upd_points(state, payload) {
-      state.points = payload;
+      state.stepOneData.points = payload;
     },
   },
   actions: {
     async login({ commit }) {
-      commit('auth_request');
+      commit('start_loading', 'auth');
       const secret = process.env.VUE_APP_SECRET;
       const basic = Buffer.from(`11d7c9f` + ':' + secret).toString('base64');
       try {
@@ -55,11 +66,12 @@ export default new Vuex.Store({
         commit('auth_success', token);
       } catch (error) {
         console.log(error);
-        commit('auth_error');
+        commit('error_loading', 'auth');
         localStorage.removeItem('token');
       }
     },
-    async getCities({ commit }) {
+    async getStepOneData({ commit }) {
+      commit('start_loading', 'stepOneData');
       try {
         let city = await axios({
           method: 'get',
@@ -68,12 +80,7 @@ export default new Vuex.Store({
         if (city.data.data) {
           commit('upd_cities', city.data.data);
         }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getPoints({ commit }) {
-      try {
+
         let point = await axios({
           method: 'get',
           url: '/db/point',
@@ -83,6 +90,9 @@ export default new Vuex.Store({
         }
       } catch (error) {
         console.log(error);
+        commit('error_loading', 'stepOneData');
+      } finally {
+        commit('finish_loading', 'stepOneData');
       }
     },
   },
