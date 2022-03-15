@@ -46,23 +46,28 @@
         </div>
       </div>
     </fieldset>
-    <fieldset>
+    <Loader v-if="cars.status === 'loading'" />
+    <fieldset v-else>
       <ul class="order-form__models order-models">
         <li
           class="order-models__item"
           :class="{
-            'order-models__item--active': stepTwo.chosenModel === cars[idx],
+            'order-models__item--active': stepTwo.chosenModel.id === item.id,
           }"
-          v-for="(item, idx) in cars"
+          v-for="item in carsList"
           :key="item.id"
-          @click.prevent="pickModel(idx)"
+          @click.prevent="pickModel(item.id)"
         >
-          <div class="order-models__title">{{ item.model }}</div>
-          <div class="order-models__price">{{ item.price }}</div>
+          <div class="order-models__title">{{ item.name }}</div>
+          <div class="order-models__price">
+            {{ item.priceMin }} - {{ item.priceMax }} ₽
+          </div>
           <div class="order-models__img-wrapper">
             <img
-              src="~@/assets/img/car-example.png"
-              alt="Изображение автомобиля"
+              v-if="item.thumbnail.path"
+              v-image-fall-back
+              :src="item.thumbnail.path"
+              :alt="item.name"
               class="order-models__img"
             />
           </div>
@@ -74,6 +79,9 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators';
+import { mapState } from 'vuex';
+
+import Loader from '@/components/common/Loader.vue';
 export default {
   data() {
     return {
@@ -81,41 +89,28 @@ export default {
         chosenModel: '',
       },
       filter: '',
-      cars: [
-        {
-          model: 'ELANTRA',
-          price: '12 000 - 25 000 ₽',
-        },
-        {
-          model: 'i30 N',
-          price: '10 000 - 32 000 ₽',
-        },
-        {
-          model: 'ELANTRA',
-          price: '12 000 - 25 000 ₽',
-        },
-        {
-          model: 'i30 N',
-          price: '10 000 - 32 000 ₽',
-        },
-        {
-          model: 'ELANTRA',
-          price: '12 000 - 25 000 ₽',
-        },
-        {
-          model: 'i30 N',
-          price: '10 000 - 32 000 ₽',
-        },
-        {
-          model: 'ELANTRA',
-          price: '12 000 - 25 000 ₽',
-        },
-      ],
+      carsList: [],
     };
+  },
+  computed: {
+    ...mapState(['cars']),
+    economyCars() {
+      return this.cars.list.filter(
+        (el) =>
+          el.categoryId.name.toLowerCase() === 'эконом' ||
+          el.categoryId.name.toLowerCase().includes('эконом') ||
+          el.categoryId.name.toLowerCase().includes('доступные')
+      );
+    },
+    premiumCars() {
+      return this.cars.list.filter((el) =>
+        el.categoryId.description.toLowerCase().includes('премиум')
+      );
+    },
   },
   methods: {
     pickModel(val) {
-      this.stepTwo.chosenModel = this.cars[val];
+      this.stepTwo.chosenModel = this.cars.list.find((el) => el.id === val);
     },
   },
   validations: {
@@ -125,6 +120,9 @@ export default {
       },
     },
   },
+  mounted() {
+    this.filter = 1;
+  },
   watch: {
     'stepTwo.chosenModel': function (val) {
       this.$emit('changeFormData', {
@@ -133,6 +131,28 @@ export default {
         step: 2,
       });
     },
+    cars: {
+      handler: function (val) {
+        if (val != undefined) {
+          this.carsList = val.list;
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+    filter: {
+      handler: function (val) {
+        if (val === 1) {
+          this.carsList = this.cars.list;
+        } else if (val === 2) {
+          this.carsList = this.economyCars;
+        } else if (val === 3) {
+          this.carsList = this.premiumCars;
+        }
+      },
+      immediate: true,
+    },
   },
+  components: { Loader },
 };
 </script>

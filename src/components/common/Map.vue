@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import { loadYmap } from 'vue-yandex-maps';
 export default {
   props: ['allMarkers'],
   data() {
@@ -19,34 +18,6 @@ export default {
       coords: [59.939098, 30.315868],
       markers: [],
     };
-  },
-  watch: {
-    allMarkers: async function (val) {
-      await loadYmap();
-
-      var array = [];
-
-      ymaps.ready(async function () {
-        var allCoords = await val.map((item) => {
-          var geocoder = new ymaps.geocode(item);
-
-          geocoder.then(function (res) {
-            var geoobject = res.geoObjects.get(0).geometry.getCoordinates();
-            var name = res.geoObjects.get(0).properties.get('name');
-
-            console.log(geoobject);
-            console.log(name);
-
-            return {
-              name,
-              geoobject,
-            };
-          });
-        });
-        console.log(allCoords);
-        console.log(array);
-      });
-    },
   },
 };
 </script>

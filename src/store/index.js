@@ -6,21 +6,33 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    status: '',
+    auth: {
+      status: '',
+    },
     token: localStorage.getItem('token') || '',
     cities: [],
     points: [],
+    cars: {
+      status: '',
+      list: [],
+    },
   },
   mutations: {
-    auth_request(state) {
-      state.status = 'loading';
+    start_loading(state, payload) {
+      let block = state[payload];
+      block.status = 'loading';
+    },
+    finish_loading(state, payload) {
+      let block = state[payload];
+      block.status = '';
     },
     auth_success(state, token) {
-      state.status = 'success';
+      state.auth.status = 'success';
       state.token = token;
     },
-    auth_error(state) {
-      state.status = 'error';
+    throw_error(state, payload) {
+      let block = state[payload];
+      block.status = 'error';
     },
     upd_cities(state, payload) {
       state.cities = payload;
@@ -28,10 +40,13 @@ export default new Vuex.Store({
     upd_points(state, payload) {
       state.points = payload;
     },
+    upd_cars(state, payload) {
+      state.cars.list = payload;
+    },
   },
   actions: {
     async login({ commit }) {
-      commit('auth_request');
+      commit('start_loading', 'auth');
       const secret = process.env.VUE_APP_SECRET;
       const basic = Buffer.from(`11d7c9f` + ':' + secret).toString('base64');
       try {
@@ -55,7 +70,7 @@ export default new Vuex.Store({
         commit('auth_success', token);
       } catch (error) {
         console.log(error);
-        commit('auth_error');
+        commit('throw_error', 'auth');
         localStorage.removeItem('token');
       }
     },
@@ -83,6 +98,23 @@ export default new Vuex.Store({
         }
       } catch (error) {
         console.log(error);
+      }
+    },
+    async getCars({ commit }) {
+      commit('start_loading', 'cars');
+      try {
+        let cars = await axios({
+          method: 'get',
+          url: '/db/car',
+        });
+        if (cars.data.data) {
+          commit('upd_cars', cars.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+        commit('throw_error', 'cars');
+      } finally {
+        commit('finish_loading', 'cars');
       }
     },
   },

@@ -55,11 +55,11 @@
                 </li>
                 <li
                   class="details-list__item details-item"
-                  v-if="formDetails.model"
+                  v-if="formDetails.name"
                 >
                   <div class="details-item__title">Модель</div>
                   <div class="details-item__value">
-                    {{ formDetails.model }}
+                    {{ formDetails.name }}
                   </div>
                 </li>
                 <li
@@ -111,8 +111,8 @@
                   <div class="details-item__value">Да</div>
                 </li>
               </ul>
-              <div class="order-details__price">
-                <span>Цена:</span> 16 000 ₽
+              <div class="order-details__price" v-if="countedPrice">
+                <span>Цена:</span> {{ countedPrice }} ₽
               </div>
             </template>
 
@@ -219,6 +219,12 @@ export default {
       }
       return null;
     },
+    countedPrice() {
+      if (this.formDetails) {
+        return this.formDetails.priceMin;
+      }
+      return null;
+    },
   },
   methods: {
     updateFormData(val) {
@@ -234,6 +240,7 @@ export default {
   async mounted() {
     await this.$store.dispatch('getCities');
     await this.$store.dispatch('getPoints');
+    await this.$store.dispatch('getCars');
   },
 };
 </script>

@@ -1,11 +1,12 @@
 <template>
   <div>
-    <StepOne
-      v-show="currentStep === 1"
-      @changeFormData="changeFormData"
-    />
+    <StepOne v-show="currentStep === 1" @changeFormData="changeFormData" />
     <StepTwo v-show="currentStep === 2" @changeFormData="changeFormData" />
-    <StepThree v-show="currentStep === 3" @changeFormData="changeFormData" />
+    <StepThree
+      v-show="currentStep === 3"
+      @changeFormData="changeFormData"
+      :filledForm="filledForm"
+    />
     <StepFour v-show="currentStep === 4" :filledForm="filledForm" />
   </div>
 </template>
