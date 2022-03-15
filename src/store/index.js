@@ -10,11 +10,14 @@ export default new Vuex.Store({
       status: '',
     },
     token: localStorage.getItem('token') || '',
-    cities: [],
-    points: [],
     cars: {
       status: '',
       list: [],
+    },
+    stepOneData: {
+      cities: [],
+      points: [],
+      status: '',
     },
   },
   mutations: {
@@ -35,10 +38,10 @@ export default new Vuex.Store({
       block.status = 'error';
     },
     upd_cities(state, payload) {
-      state.cities = payload;
+      state.stepOneData.cities = payload;
     },
     upd_points(state, payload) {
-      state.points = payload;
+      state.stepOneData.points = payload;
     },
     upd_cars(state, payload) {
       state.cars.list = payload;
@@ -74,7 +77,8 @@ export default new Vuex.Store({
         localStorage.removeItem('token');
       }
     },
-    async getCities({ commit }) {
+    async getStepOneData({ commit }) {
+      commit('start_loading', 'stepOneData');
       try {
         let city = await axios({
           method: 'get',
@@ -83,12 +87,7 @@ export default new Vuex.Store({
         if (city.data.data) {
           commit('upd_cities', city.data.data);
         }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getPoints({ commit }) {
-      try {
+
         let point = await axios({
           method: 'get',
           url: '/db/point',
@@ -98,6 +97,9 @@ export default new Vuex.Store({
         }
       } catch (error) {
         console.log(error);
+        commit('throw_error', 'stepOneData');
+      } finally {
+        commit('finish_loading', 'stepOneData');
       }
     },
     async getCars({ commit }) {

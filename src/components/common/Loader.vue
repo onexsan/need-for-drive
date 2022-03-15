@@ -12,7 +12,6 @@
   display: flex;
   justify-content: center;
 }
-
 .lds-ripple {
   display: inline-block;
   position: relative;

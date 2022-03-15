@@ -238,8 +238,7 @@ export default {
     },
   },
   async mounted() {
-    await this.$store.dispatch('getCities');
-    await this.$store.dispatch('getPoints');
+    await this.$store.dispatch('getStepOneData');
     await this.$store.dispatch('getCars');
   },
 };
