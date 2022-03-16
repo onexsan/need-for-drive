@@ -73,11 +73,12 @@
                 </li>
                 <li
                   class="details-list__item details-item"
-                  v-if="hours !== null"
+                  v-if="duration !== null"
                 >
                   <div class="details-item__title">Длительность аренды</div>
                   <div class="details-item__value">
-                    {{ hours > 0 ? `${hours} д.` : 'Менее суток' }}
+                    {{ duration.days }}д. {{ duration.hours }}ч.
+                    {{ duration.minutes }}мин.
                   </div>
                 </li>
                 <li
@@ -204,7 +205,7 @@ export default {
       let steps = Object.values(this.stepsCompleted);
       return steps.some((el) => el === true);
     },
-    hours() {
+    duration() {
       if (this.orderDetails.dateFrom && this.orderDetails.dateTo) {
         var delta =
           Math.abs(
@@ -215,13 +216,45 @@ export default {
         var days = Math.floor(delta / 86400);
         delta -= days * 86400;
 
-        return days;
+        var hours = Math.floor(delta / 3600) % 24;
+        delta -= hours * 3600;
+
+        var minutes = Math.floor(delta / 60) % 60;
+        delta -= minutes * 60;
+
+        return { days, hours, minutes };
       }
       return null;
     },
     countedPrice() {
-      if (this.formDetails) {
-        return this.formDetails.priceMin;
+      if (this.orderDetails && !this.orderDetails.rate && !this.duration) {
+        return this.orderDetails.priceMin;
+      }
+      if (this.orderDetails && this.orderDetails.rate && this.duration) {
+        let days =
+          this.duration.hours > 0 || this.duration.minutes > 0
+            ? this.duration.days + 1
+            : this.duration.days;
+        let weeks = Math.ceil(days / 7);
+        let months = Math.ceil(days / 30);
+        let minutes =
+          this.duration.days * 1440 +
+          this.duration.hours * 60 +
+          this.duration.minutes;
+
+        if (this.orderDetails.rate === 'Суточный') {
+          let price = days * this.orderDetails.ratePrice;
+          return price;
+        } else if (this.orderDetails.rate === 'Недельный (Акция!)') {
+          let price = weeks * this.orderDetails.ratePrice;
+          return price;
+        } else if (this.orderDetails.rate === 'Месячный') {
+          let price = months * this.orderDetails.ratePrice;
+          return price;
+        } else if (this.orderDetails.rate === 'Поминутно') {
+          let price = minutes * this.orderDetails.ratePrice;
+          return price;
+        }
       }
       return null;
     },
@@ -230,6 +263,7 @@ export default {
   async mounted() {
     await this.$store.dispatch('getStepOneData');
     await this.$store.dispatch('getCars');
+    await this.$store.dispatch('getStepThreeData');
   },
 };
 </script>

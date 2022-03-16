@@ -186,7 +186,8 @@
     margin-bottom: 16px;
   }
 
-  &__input {
+  &__input,
+  input.field-input {
     max-width: 224px;
 
     @include lg-tablets {

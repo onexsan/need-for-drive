@@ -17,31 +17,21 @@
             <span class="radio__icon"></span>
           </label>
         </div>
-        <div class="form-group__radio">
-          <label class="radio" for="red-color">
+        <div
+          class="form-group__radio"
+          v-for="item in orderDetails.colors"
+          :key="item.id"
+        >
+          <label class="radio" :for="item">
             <input
               type="radio"
               class="radio__input"
               name="color"
-              id="red-color"
+              :id="item"
               v-model="stepThree.color"
-              value="Красный"
+              :value="item"
             />
-            <span class="radio__text">Красный</span>
-            <span class="radio__icon"></span>
-          </label>
-        </div>
-        <div class="form-group__radio">
-          <label class="radio" for="blue-color">
-            <input
-              type="radio"
-              class="radio__input"
-              name="color"
-              id="blue-color"
-              v-model="stepThree.color"
-              value="Голубой"
-            />
-            <span class="radio__text">Голубой</span>
+            <span class="radio__text">{{ item }}</span>
             <span class="radio__icon"></span>
           </label>
         </div>
@@ -53,53 +43,48 @@
         class="form-group order-form__form-group order-form__form-group--grid"
       >
         <label for="order-from" class="order-form__label">С</label>
-        <input
-          type="date"
-          name="order-from"
+        <VueCtkDateTimePicker
           id="order-from"
-          class="form-control custom-input order-form__input"
-          placeholder="Введите дату и время"
+          format="YYYY-MM-DD HH:mm"
+          color="#0ec261"
+          label="Введите дату и время"
+          :no-label="true"
           v-model="stepThree.dateFrom"
         />
         <label for="order-to" class="order-form__label">По</label>
-        <input
-          type="date"
-          name="order-to"
+        <VueCtkDateTimePicker
           id="order-to"
-          class="form-control custom-input order-form__input"
-          placeholder="Введите дату и время"
+          format="YYYY-MM-DD HH:mm"
+          color="#0ec261"
+          label="Введите дату и время"
+          :no-label="true"
           v-model="stepThree.dateTo"
         />
       </div>
     </fieldset>
-    <fieldset>
+    <Loader v-if="stepThreeData.status === 'loading'" />
+    <fieldset v-else>
       <legend class="order-form__legend">Тариф</legend>
       <div class="form-group order-form__form-group">
-        <div class="form-group__radio form-group-radio">
-          <label class="radio" for="rate-minute">
+        <div
+          class="form-group__radio form-group-radio"
+          v-for="item in stepThreeData.rates"
+          :key="item.id"
+        >
+          <label class="radio" :for="item.rateTypeId.name">
             <input
               type="radio"
               class="radio__input"
               name="rate"
-              id="rate-minute"
+              :id="item.rateTypeId.name"
               v-model="stepThree.rate"
-              value="Поминутно, 7₽/мин"
+              :value="item.rateTypeId.name"
             />
-            <span class="radio__text">Поминутно, 7₽/мин</span>
-            <span class="radio__icon"></span>
-          </label>
-        </div>
-        <div class="form-group__radio">
-          <label class="radio" for="rate-day">
-            <input
-              type="radio"
-              class="radio__input"
-              name="rate"
-              id="rate-day"
-              v-model="stepThree.rate"
-              value="На сутки, 1999 ₽/сутки"
-            />
-            <span class="radio__text">На сутки, 1999 ₽/сутки</span>
+            <span class="radio__text"
+              >{{ item.rateTypeId.name }}, {{ item.price }}₽/{{
+                item.rateTypeId.unit
+              }}</span
+            >
             <span class="radio__icon"></span>
           </label>
         </div>
@@ -154,6 +139,9 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators';
+import { mapState } from 'vuex';
+
+import Loader from '@/components/common/Loader.vue';
 export default {
   data() {
     return {
@@ -162,6 +150,7 @@ export default {
         dateFrom: '',
         dateTo: '',
         rate: '',
+        ratePrice: '',
         extraFuel: false,
         extraBabyChair: false,
         extraRightSide: false,
@@ -169,6 +158,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['stepThreeData', 'orderDetails']),
     isFormFilled() {
       return this.$v.form;
     },
@@ -194,6 +184,15 @@ export default {
         });
       },
     },
+    'stepThree.rate': function (val) {
+      let rateObj = this.stepThreeData.rates.find(
+        (el) => el.rateTypeId.name == val
+      );
+      this.stepThree.ratePrice = rateObj.price;
+    },
+  },
+  components: {
+    Loader,
   },
 };
 </script>
