@@ -138,3 +138,11 @@ form.order-form input.field-input {
     display: block;
   }
 }
+
+.date-time-picker .field.flex {
+  max-width: 224px;
+
+  @include lg-tablets {
+    max-width: none;
+  }
+}

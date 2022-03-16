@@ -254,6 +254,12 @@
     @include phones {
       font-size: 14px;
     }
+
+    &--error {
+      span {
+        color: #a50707;
+      }
+    }
   }
 
   &__btn {

@@ -58,6 +58,7 @@
           color="#0ec261"
           label="Введите дату и время"
           :no-label="true"
+          :min-date="stepThree.dateFrom"
           v-model="stepThree.dateTo"
         />
       </div>

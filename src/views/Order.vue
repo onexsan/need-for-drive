@@ -77,8 +77,9 @@
                 >
                   <div class="details-item__title">Длительность аренды</div>
                   <div class="details-item__value">
-                    {{ duration.days }}д. {{ duration.hours }}ч.
-                    {{ duration.minutes }}мин.
+                    {{ duration.days }}д.
+                    {{ duration.hours ? `${duration.hours}ч.` : '' }}
+                    {{ duration.minutes ? `${duration.minutes}мин.` : '' }}
                   </div>
                 </li>
                 <li
@@ -114,6 +115,26 @@
               </ul>
               <div class="order-details__price" v-if="countedPrice">
                 <span>Цена:</span> {{ countedPrice }} ₽
+              </div>
+              <div
+                class="order-details__price order-details__price--error"
+                v-if="
+                  countedPrice < orderDetails.priceMin &&
+                  orderDetails.priceMax > orderDetails.priceMin
+                "
+              >
+                <span>Минимальная цена:</span>
+                {{ orderDetails.priceMin }} ₽
+              </div>
+              <div
+                class="order-details__price order-details__price--error"
+                v-if="
+                  countedPrice > orderDetails.priceMax &&
+                  orderDetails.priceMax > orderDetails.priceMin
+                "
+              >
+                <span>Превышена максимальная цена:</span>
+                {{ orderDetails.priceMax }} ₽
               </div>
             </template>
 
@@ -227,10 +248,11 @@ export default {
       return null;
     },
     countedPrice() {
-      if (this.orderDetails && !this.orderDetails.rate && !this.duration) {
-        return this.orderDetails.priceMin;
-      }
-      if (this.orderDetails && this.orderDetails.rate && this.duration) {
+      if (!this.orderDetails.rate && !this.duration) {
+        return this.orderDetails.priceMin !== undefined
+          ? this.orderDetails.priceMin
+          : null;
+      } else if (this.orderDetails.rate && this.duration) {
         let days =
           this.duration.hours > 0 || this.duration.minutes > 0
             ? this.duration.days + 1
@@ -242,19 +264,28 @@ export default {
           this.duration.hours * 60 +
           this.duration.minutes;
 
+        let price = '';
         if (this.orderDetails.rate === 'Суточный') {
-          let price = days * this.orderDetails.ratePrice;
-          return price;
+          price = days * this.orderDetails.ratePrice;
         } else if (this.orderDetails.rate === 'Недельный (Акция!)') {
-          let price = weeks * this.orderDetails.ratePrice;
-          return price;
+          price = weeks * this.orderDetails.ratePrice;
         } else if (this.orderDetails.rate === 'Месячный') {
-          let price = months * this.orderDetails.ratePrice;
-          return price;
+          price = months * this.orderDetails.ratePrice;
         } else if (this.orderDetails.rate === 'Поминутно') {
-          let price = minutes * this.orderDetails.ratePrice;
-          return price;
+          price = minutes * this.orderDetails.ratePrice;
         }
+
+        if (this.orderDetails.extraBabyChair) {
+          price += 200;
+        }
+        if (this.orderDetails.extraFuel) {
+          price += 500;
+        }
+        if (this.orderDetails.extraRightSide) {
+          price += 1600;
+        }
+
+        return price;
       }
       return null;
     },

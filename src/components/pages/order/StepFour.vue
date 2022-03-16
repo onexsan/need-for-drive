@@ -6,8 +6,12 @@
     <div class="order-summary__license" v-if="orderDetails.number">
       {{ orderDetails.number }}
     </div>
-    <div class="order-summary__extra" v-if="orderDetails.extraFuel === true">
-      <span>Топливо</span> 100%
+    <div
+      class="order-summary__extra"
+      v-if="orderDetails.tank || orderDetails.extraFuel === true"
+    >
+      <span>Топливо</span>
+      {{ orderDetails.extraFuel === true ? '100' : orderDetails.tank }}%
     </div>
     <div
       class="order-summary__extra"
@@ -21,9 +25,9 @@
     >
       С <span>правым рулём</span>
     </div>
-    <div class="order-summary__extra" v-if="orderDetails.dateFrom">
+    <div class="order-summary__extra" v-if="availableFrom">
       <span>Доступна</span> с
-      {{ orderDetails.dateFrom.split('-').reverse().join('.') }}
+      {{ availableFrom }}
     </div>
     <img
       v-image-fall-back
@@ -40,6 +44,16 @@ import { mapState } from 'vuex';
 export default {
   computed: {
     ...mapState(['orderDetails']),
+    availableFrom() {
+      if (this.orderDetails.dateFrom) {
+        return `${this.orderDetails.dateFrom
+          .split(' ')[0]
+          .split('-')
+          .reverse()
+          .join('.')} ${this.orderDetails.dateFrom.split(' ')[1]}`;
+      }
+      return null;
+    },
   },
 };
 </script>
