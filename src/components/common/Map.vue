@@ -1,51 +1,48 @@
 <template>
-  <yandex-map :coords="coords" zoom="10">
-    <ymap-marker
-      v-for="(item, idx) in markers"
-      :key="idx"
-      :coords="item"
-      :markerId="(idx + 1).toString()"
-    >
-    </ymap-marker>
+  <yandex-map :coords="coords" zoom="5" @map-was-initialized="workWithMap">
   </yandex-map>
 </template>
 
 <script>
 import { loadYmap } from 'vue-yandex-maps';
+
 export default {
   props: ['allMarkers'],
   data() {
     return {
       coords: [59.939098, 30.315868],
       markers: [],
+      pickedAddress: '',
     };
   },
-  watch: {
-    allMarkers: async function (val) {
+  methods: {
+    async workWithMap(payload) {
       await loadYmap();
 
-      var array = [];
+      var myMap = payload;
 
-      ymaps.ready(async function () {
-        var allCoords = await val.map((item) => {
-          var geocoder = new ymaps.geocode(item);
+      for (let item of this.allMarkers) {
+        ymaps.geocode(item).then(function (res) {
+          var firstGeoObject = res.geoObjects.get(0);
 
-          geocoder.then(function (res) {
-            var geoobject = res.geoObjects.get(0).geometry.getCoordinates();
-            var name = res.geoObjects.get(0).properties.get('name');
-
-            console.log(geoobject);
-            console.log(name);
-
-            return {
-              name,
-              geoobject,
-            };
-          });
+          firstGeoObject.options.set(
+            'preset',
+            'islands#darkBlueDotIconWithCaption'
+          );
+          firstGeoObject.properties.set('iconCaption', item);
+          myMap.geoObjects.add(firstGeoObject);
         });
-        console.log(allCoords);
-        console.log(array);
+      }
+
+      myMap.geoObjects.events.add('click', function (e) {
+        let coords = e.get('target')['properties'].get('iconCaption');
+        console.log(coords);
       });
+
+      myMap.geoObjects.options.set(
+        'iconImageHref',
+        'https://sandbox.api.maps.yandex.net/examples/ru/2.1/icon_customImage/images/ball.png'
+      );
     },
   },
 };
