@@ -9,6 +9,7 @@
       :placeholder="`Начните вводить ${inputLabel.toLowerCase()}...`"
       v-model="search"
       @input="onChange"
+      @focus="onChange"
       @click="onChange"
       :disabled="disabled"
     />
@@ -19,7 +20,7 @@
         :key="i"
         @click="setResult(result)"
       >
-        {{ result.name }}
+        {{ result.name }}{{ result.address ? `, ${result.address}` : '' }}
       </li>
       <li class="autocomplete-result" v-if="!results.length">Не найдено.</li>
     </ul>
@@ -69,6 +70,11 @@ export default {
     search: function (val) {
       if (val === '') {
         this.chosenResult = {};
+      } else if (val !== '' && val !== undefined) {
+        let isFound = this.results.find((el) => el.name === val);
+        if (isFound !== undefined) {
+          this.chosenResult = isFound;
+        }
       }
       this.$emit('updData', {
         type: this.inputLabel,
