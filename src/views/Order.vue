@@ -118,20 +118,14 @@
               </div>
               <div
                 class="order-details__price order-details__price--error"
-                v-if="
-                  countedPrice < orderDetails.priceMin &&
-                  orderDetails.priceMax > orderDetails.priceMin
-                "
+                v-if="isPriceLess"
               >
                 <span>Минимальная цена:</span>
                 {{ orderDetails.priceMin }} ₽
               </div>
               <div
                 class="order-details__price order-details__price--error"
-                v-if="
-                  countedPrice > orderDetails.priceMax &&
-                  orderDetails.priceMax > orderDetails.priceMin
-                "
+                v-if="isPriceOver"
               >
                 <span>Превышена максимальная цена:</span>
                 {{ orderDetails.priceMax }} ₽
@@ -153,7 +147,10 @@
               v-if="currentStep === 3"
               @click="currentStep += 1"
               :disabled="
-                stepsCompleted[currentStep] === false || !areAllStepsFilled
+                stepsCompleted[currentStep] === false ||
+                !areAllStepsFilled ||
+                isPriceLess ||
+                isPriceOver
               "
             >
               Итого
@@ -288,6 +285,26 @@ export default {
         return price;
       }
       return null;
+    },
+    isPriceLess() {
+      if (
+        this.countedPrice !== null &&
+        this.countedPrice < this.orderDetails.priceMin &&
+        this.orderDetails.priceMax > this.orderDetails.priceMin
+      ) {
+        return true;
+      }
+      return false;
+    },
+    isPriceOver() {
+      if (
+        this.countedPrice !== null &&
+        this.countedPrice > this.orderDetails.priceMax &&
+        this.orderDetails.priceMax > this.orderDetails.priceMin
+      ) {
+        return true;
+      }
+      return false;
     },
   },
   methods: {},
