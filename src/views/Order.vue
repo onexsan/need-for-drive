@@ -174,7 +174,7 @@
         </div>
       </div>
     </main>
-    <OrderConfirmationModal />
+    <OrderConfirmationModal aim="Подтвердить" />
   </section>
 </template>
 
@@ -310,6 +310,7 @@ export default {
   },
   methods: {},
   async mounted() {
+    await this.$store.dispatch('getOrderStatus', 'Новые');
     await this.$store.dispatch('getStepOneData');
     await this.$store.dispatch('getCars');
     await this.$store.dispatch('getStepThreeData');
