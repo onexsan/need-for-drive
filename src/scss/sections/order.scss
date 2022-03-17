@@ -409,6 +409,8 @@
   margin: 32px 0px;
   position: relative;
   height: fit-content;
+  display: flex;
+  justify-content: space-between;
   width: 80%;
 
   @include sm-desktops {
@@ -417,6 +419,13 @@
 
   @include lg-desktops {
     width: 50%;
+  }
+
+  &__col {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
   }
 
   &__title {
@@ -471,15 +480,12 @@
   }
 
   &__img {
-    width: 40%;
+    width: 100%;
     max-width: 256px;
     height: auto;
-    position: absolute;
-    bottom: 0;
-    right: 0;
 
-    @include lg-desktops {
-      max-width: 550px;
+    @include phones {
+      max-width: 200px;
     }
   }
 }

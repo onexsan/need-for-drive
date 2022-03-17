@@ -313,5 +313,12 @@ export default {
     await this.$store.dispatch('getCars');
     await this.$store.dispatch('getStepThreeData');
   },
+  watch: {
+    countedPrice: function (val) {
+      if (val !== null && val !== undefined) {
+        this.$store.commit('upd_order_price', val);
+      }
+    },
+  },
 };
 </script>

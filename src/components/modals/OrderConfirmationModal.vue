@@ -6,7 +6,13 @@
   >
     <p class="order-confirmation-modal__text">Подтвердить заказ</p>
     <template #modal-footer>
-      <button class="btn">Подтвердить</button>
+      <button
+        class="btn"
+        @click="sendOrder"
+        :disabled="orderRequest.status === 'loading'"
+      >
+        Подтвердить
+      </button>
       <button
         class="btn btn-danger"
         @click="$bvModal.hide(`order-confirmation-modal`)"
@@ -16,3 +22,27 @@
     </template>
   </b-modal>
 </template>
+
+<script>
+import { mapState } from 'vuex';
+
+export default {
+  computed: {
+    ...mapState(['orderRequest']),
+  },
+  methods: {
+    async sendOrder() {
+      await this.$store.dispatch('sendOrder');
+    },
+  },
+  watch: {
+    'orderRequest.response': {
+      handler: function (val) {
+        if (val.id && val.id !== '' && val.id !== undefined) {
+          this.$router.push(`/order-details/${val.id}`);
+        }
+      },
+    },
+  },
+};
+</script>

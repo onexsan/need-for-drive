@@ -2,7 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Order from '../views/Order.vue';
-import OrderDetails from '../views/OrderDetails.vue';
+import OrderBlank from '../views/OrderBlank.vue';
+import OrderDetailsData from '../views/OrderDetailsData.vue';
 
 Vue.use(VueRouter);
 
@@ -24,12 +25,13 @@ const routes = [
     },
   },
   {
-    path: '/order-details/',
-    name: 'OrderDetails',
-    component: OrderDetails,
+    path: '/order-details/:id',
+    name: 'OrderBlank',
+    component: OrderBlank,
     meta: {
       title: 'Need For Drive',
     },
+    children: [{ path: '', component: OrderDetailsData }],
   },
 ];
 
