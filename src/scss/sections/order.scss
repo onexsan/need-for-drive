@@ -483,6 +483,7 @@
     width: 100%;
     max-width: 256px;
     height: auto;
+    padding-right: 20px;
 
     @include phones {
       max-width: 200px;
