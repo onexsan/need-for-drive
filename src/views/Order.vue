@@ -23,7 +23,8 @@
             class="order-nav__item"
             :class="{
               'order-nav__item--active': currentStep === 4,
-              'order-nav__item--allowed': areAllStepsFilled,
+              'order-nav__item--allowed':
+                areAllStepsFilled && !isPriceLess && !isPriceOver,
             }"
             @click="currentStep = 4"
           >

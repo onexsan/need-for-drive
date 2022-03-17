@@ -26,7 +26,6 @@ const routes = [
   },
   {
     path: '/order-details/:id',
-    name: 'OrderBlank',
     component: OrderBlank,
     meta: {
       title: 'Need For Drive',
