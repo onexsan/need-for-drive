@@ -66,6 +66,7 @@
             </div>
           </li>
         </ul>
+        <p v-if="!carsList.length">Не найдено.</p>
       </fieldset>
     </template>
   </form>
@@ -84,23 +85,11 @@ export default {
       },
       filter: '',
       carsList: [],
+      clearCars: [],
     };
   },
   computed: {
     ...mapState(['cars']),
-    economyCars() {
-      return this.cars.list.filter(
-        (el) =>
-          el.categoryId.name.toLowerCase() === 'эконом' ||
-          el.categoryId.name.toLowerCase().includes('эконом') ||
-          el.categoryId.name.toLowerCase().includes('доступные')
-      );
-    },
-    premiumCars() {
-      return this.cars.list.filter((el) =>
-        el.categoryId.description.toLowerCase().includes('премиум')
-      );
-    },
   },
   methods: {
     pickModel(val) {
@@ -128,7 +117,8 @@ export default {
     cars: {
       handler: function (val) {
         if (val != undefined) {
-          this.carsList = val.list;
+          this.clearCars = val.list.filter((el) => el.priceMin < el.priceMax);
+          this.carsList = this.clearCars;
         }
       },
       immediate: true,
@@ -138,9 +128,9 @@ export default {
       handler: function (val) {
         if (val !== undefined) {
           if (val === 1) {
-            this.carsList = this.cars.list;
+            this.carsList = this.clearCars;
           } else {
-            let cars = this.cars.list.filter(
+            let cars = this.clearCars.filter(
               (el) => el.categoryId.name === val
             );
             this.carsList = cars;
