@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  props: ['inputID', 'inputLabel', 'items', 'disabled'],
+  props: ['inputID', 'inputLabel', 'items', 'disabled', 'fromMap'],
   data() {
     return {
       isOpen: false,
@@ -67,19 +67,41 @@ export default {
     document.removeEventListener('click', this.handleClickOutside);
   },
   watch: {
-    search: function (val) {
-      if (val === '') {
-        this.chosenResult = {};
-      } else if (val !== '' && val !== undefined) {
-        let isFound = this.results.find((el) => el.name === val);
-        if (isFound !== undefined) {
-          this.chosenResult = isFound;
+    'fromMap.city': {
+      handler: function (val) {
+        if (this.inputLabel === 'Город') {
+          if (this.search !== val.name) {
+            this.search = val.name;
+          }
         }
-      }
-      this.$emit('updData', {
-        type: this.inputLabel,
-        value: this.chosenResult,
-      });
+      },
+    },
+    'fromMap.pwz': {
+      handler: function (val) {
+        if (this.inputLabel === 'Пункт выдачи') {
+          let pwz = this.items.find((el) => el.address === val.address);
+          if (this.search !== pwz.name) {
+            this.search = pwz.name;
+          }
+        }
+      },
+    },
+    search: {
+      immediate: true,
+      handler: function (val) {
+        if (val === '') {
+          this.chosenResult = {};
+        } else if (val !== '' && val !== undefined) {
+          let isFound = this.items.find((el) => el.name === val);
+          if (isFound !== undefined) {
+            this.chosenResult = isFound;
+          }
+        }
+        this.$emit('updData', {
+          type: this.inputLabel,
+          value: this.chosenResult,
+        });
+      },
     },
     disabled: function (val) {
       if (val === true) {
