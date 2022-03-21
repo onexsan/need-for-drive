@@ -19,7 +19,7 @@
         </div>
         <div
           class="form-group__radio"
-          v-for="item in orderDetails.colors"
+          v-for="item in Array.from(new Set(orderDetails.colors))"
           :key="item.id"
         >
           <label class="radio" :for="item">
@@ -72,7 +72,11 @@
           v-for="item in stepThreeData.rates"
           :key="item.id"
         >
-          <label class="radio" :for="item.rateTypeId.name">
+          <label
+            class="radio"
+            :for="item.rateTypeId.name"
+            v-if="item.rateTypeId"
+          >
             <input
               type="radio"
               class="radio__input"
