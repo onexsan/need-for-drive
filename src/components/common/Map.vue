@@ -1,23 +1,109 @@
 <template>
-  <yandex-map :coords="coords" zoom="10">
-    <ymap-marker
-      v-for="(item, idx) in markers"
-      :key="idx"
-      :coords="item"
-      :markerId="(idx + 1).toString()"
-    >
-    </ymap-marker>
+  <yandex-map
+    ref="map"
+    v-if="showMap"
+    :coords="coords"
+    :options="{
+      suppressMapOpenBlock: true,
+    }"
+    zoom="3"
+    @map-was-initialized="loadMap"
+  >
   </yandex-map>
 </template>
 
 <script>
+import { loadYmap } from 'vue-yandex-maps';
+
 export default {
-  props: ['allMarkers'],
+  props: ['allMarkers', 'currentAddress'],
   data() {
     return {
-      coords: [59.939098, 30.315868],
+      coords: [55.795366, 49.105579],
       markers: [],
+      pickedAddress: '',
+      showMap: false,
     };
+  },
+  computed: {
+    currentAddressPoints() {
+      if (this.currentAddress !== null) {
+        return this.allMarkers.filter((el) => el.includes(this.currentAddress));
+      }
+      return null;
+    },
+  },
+  methods: {
+    async loadMap(payload) {
+      await loadYmap();
+
+      var myMap = payload;
+
+      myMap.controls.remove('geolocationControl');
+      myMap.controls.remove('searchControl');
+      myMap.controls.remove('trafficControl');
+      myMap.controls.remove('typeSelector');
+      myMap.controls.remove('fullscreenControl');
+      myMap.controls.remove('rulerControl');
+
+      this.handleMap(this.allMarkers);
+    },
+    async handleMap(payload) {
+      await loadYmap();
+
+      var mapComponent = this.$refs.map;
+      var myMap = mapComponent.myMap;
+
+      if (this.currentAddressPoints.length) {
+        myMap.geoObjects.removeAll();
+      }
+
+      for (let item of payload) {
+        ymaps.geocode(item).then(function (res) {
+          var firstGeoObject = res.geoObjects.get(0);
+          firstGeoObject.options.set('preset', 'islands#darkGreenCircleIcon');
+          firstGeoObject.properties.set('iconCaption', item);
+          myMap.geoObjects.add(firstGeoObject);
+
+          var coords = firstGeoObject.geometry.getCoordinates();
+          if (payload.length === 1) {
+            myMap.setCenter(coords, 14, { duration: 300 });
+          }
+        });
+      }
+
+      let self = this;
+      myMap.geoObjects.events.add('click', function (e) {
+        let coords = e.get('target')['properties'].get('iconCaption');
+        self.pickedAddress = coords;
+      });
+    },
+  },
+  watch: {
+    pickedAddress: function (val) {
+      if (val !== '') {
+        this.$emit('updAddress', val);
+      }
+    },
+    currentAddressPoints: {
+      handler: function (val) {
+        this.handleMap(val);
+      },
+    },
+    currentAddress: {
+      handler: async function (val) {
+        if (val === '') {
+          await loadYmap();
+
+          var mapComponent = this.$refs.map;
+          var myMap = mapComponent.myMap;
+          myMap.setCenter(this.coords, 3, { duration: 300 });
+        }
+      },
+    },
+  },
+  mounted() {
+    this.showMap = true;
   },
 };
 </script>
@@ -29,5 +115,10 @@ export default {
 
 .ymap-container {
   height: 350px;
+}
+
+[class*='ymaps-2'][class*='-ground-pane'] {
+  filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='grayscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0'/></filter></svg>#grayscale");
+  -webkit-filter: grayscale(100%);
 }
 </style>

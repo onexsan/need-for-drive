@@ -9,6 +9,7 @@
       :placeholder="`Начните вводить ${inputLabel.toLowerCase()}...`"
       v-model="search"
       @input="onChange"
+      @focus="onChange"
       @click="onChange"
       :disabled="disabled"
     />
@@ -19,7 +20,7 @@
         :key="i"
         @click="setResult(result)"
       >
-        {{ result.name }}
+        {{ result.name }}{{ result.address ? `, ${result.address}` : '' }}
       </li>
       <li class="autocomplete-result" v-if="!results.length">Не найдено.</li>
     </ul>
@@ -28,7 +29,7 @@
 
 <script>
 export default {
-  props: ['inputID', 'inputLabel', 'items', 'disabled'],
+  props: ['inputID', 'inputLabel', 'items', 'disabled', 'fromMap'],
   data() {
     return {
       isOpen: false,
@@ -66,14 +67,41 @@ export default {
     document.removeEventListener('click', this.handleClickOutside);
   },
   watch: {
-    search: function (val) {
-      if (val === '') {
-        this.chosenResult = {};
-      }
-      this.$emit('updData', {
-        type: this.inputLabel,
-        value: this.chosenResult,
-      });
+    'fromMap.city': {
+      handler: function (val) {
+        if (this.inputLabel === 'Город') {
+          if (this.search !== val.name) {
+            this.search = val.name;
+          }
+        }
+      },
+    },
+    'fromMap.pwz': {
+      handler: function (val) {
+        if (this.inputLabel === 'Пункт выдачи') {
+          let pwz = this.items.find((el) => el.address === val.address);
+          if (this.search !== pwz.name) {
+            this.search = pwz.name;
+          }
+        }
+      },
+    },
+    search: {
+      immediate: true,
+      handler: function (val) {
+        if (val === '') {
+          this.chosenResult = {};
+        } else if (val !== '' && val !== undefined) {
+          let isFound = this.items.find((el) => el.name === val);
+          if (isFound !== undefined) {
+            this.chosenResult = isFound;
+          }
+        }
+        this.$emit('updData', {
+          type: this.inputLabel,
+          value: this.chosenResult,
+        });
+      },
     },
     disabled: function (val) {
       if (val === true) {

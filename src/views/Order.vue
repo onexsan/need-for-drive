@@ -18,6 +18,7 @@
             @click="currentStep = step.id"
           >
             <div class="order-nav__link">{{ step.title }}</div>
+
           </li>
           <li
             class="order-nav__item"
@@ -29,6 +30,7 @@
             @click="currentStep = 4"
           >
             <div class="order-nav__link">Итого</div>
+
           </li>
         </ul>
       </div>
@@ -186,6 +188,7 @@ import StepTwo from '@/components/pages/order/StepTwo.vue';
 import StepThree from '@/components/pages/order/StepThree.vue';
 import StepFour from '@/components/pages/order/StepFour.vue';
 import OrderConfirmationModal from '@/components/modals/OrderConfirmationModal.vue';
+
 export default {
   components: {
     Header,
