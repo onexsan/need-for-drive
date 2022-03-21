@@ -78,7 +78,7 @@ input.form-control {
   @include phones {
     font-size: 12px;
   }
-
+  
   &__input {
     position: absolute;
     opacity: 0;
