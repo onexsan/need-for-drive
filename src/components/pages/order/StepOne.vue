@@ -8,6 +8,7 @@
             inputID="order-city"
             inputLabel="Город"
             :items="filteredCities"
+            :fromMap="fromMap"
             @updData="updData"
           />
           <SearchAutocomplete
@@ -15,17 +16,22 @@
             inputLabel="Пункт выдачи"
             :items="filteredPoints"
             @updData="updData"
+            :fromMap="fromMap"
             :disabled="isPointDisabled"
           />
         </div>
       </fieldset>
+      <fieldset>
+        <div class="form-group order-form__form-group">
+          <legend class="order-form__legend">Выбрать на карте:</legend>
+          <Map
+            :allMarkers="allMarkers"
+            :currentAddress="stepOne.city.name ? stepOne.city.name : ''"
+            @updAddress="updAddress"
+          />
+        </div>
+      </fieldset>
     </template>
-    <fieldset>
-      <div class="form-group order-form__form-group">
-        <legend class="order-form__legend">Выбрать на карте:</legend>
-        <Map :allMarkers="allMarkers" />
-      </div>
-    </fieldset>
   </form>
 </template>
 
@@ -44,6 +50,10 @@ export default {
         place: '',
       },
       filteredPoints: [],
+      fromMap: {
+        pwz: '',
+        city: '',
+      },
     };
   },
   computed: {
@@ -81,7 +91,7 @@ export default {
         return this.stepOneData.points
           .map(function (el) {
             if (el.cityId !== null) {
-              return `${el.cityId.name} ${el.address}`;
+              return `${el.cityId.name}; ${el.address}`;
             }
           })
           .filter((el) => el !== undefined);
@@ -96,6 +106,19 @@ export default {
       }
       if (data.type === 'Пункт выдачи') {
         this.stepOne.place = data.value;
+      }
+    },
+    updAddress(val) {
+      if (val !== undefined) {
+        let cityName = val.split(';')[0];
+        let pwzName = val.split(';')[1].replace(/^\s+|\s+$/g, '');
+        let city = this.filteredCities.find((el) => el.name.includes(cityName));
+        let pwz = this.stepOneData.points.find((el) =>
+          el.address.includes(pwzName)
+        );
+        this.fromMap.pwz = {};
+        this.fromMap.pwz = pwz;
+        this.fromMap.city = city;
       }
     },
   },
@@ -124,6 +147,7 @@ export default {
         });
       },
       deep: true,
+      immediate: true,
     },
   },
   components: {
