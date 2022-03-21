@@ -8,16 +8,19 @@
             class="order-nav__item"
             :class="{
               'order-nav__item--active': currentStep === step.id,
+
               'order-nav__item--allowed':
                 currentStep >= step.id ||
                 stepsCompleted[step.id] === true ||
                 stepsCompleted[step.id - 1] === true,
+
             }"
             v-for="step in steps"
             :key="step.id"
             @click="currentStep = step.id"
           >
             <div class="order-nav__link">{{ step.title }}</div>
+
           </li>
           <li
             class="order-nav__item"
@@ -28,6 +31,7 @@
             @click="currentStep = 4"
           >
             <div class="order-nav__link">Итого</div>
+
           </li>
         </ul>
       </div>
