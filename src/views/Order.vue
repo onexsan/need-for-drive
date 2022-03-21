@@ -8,12 +8,10 @@
             class="order-nav__item"
             :class="{
               'order-nav__item--active': currentStep === step.id,
-
               'order-nav__item--allowed':
                 currentStep >= step.id ||
                 stepsCompleted[step.id] === true ||
                 stepsCompleted[step.id - 1] === true,
-
             }"
             v-for="step in steps"
             :key="step.id"
@@ -53,8 +51,8 @@
                 >
                   <div class="details-item__title">Пункт выдачи</div>
                   <div class="details-item__value">
-                    {{ orderDetails.city }},
-                    {{ orderDetails.place }}
+                    {{ orderDetails.city.name }},
+                    {{ orderDetails.place.address }}
                   </div>
                 </li>
                 <li
