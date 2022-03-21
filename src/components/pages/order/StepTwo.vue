@@ -9,6 +9,8 @@
               class="radio__input"
               name="models"
               id="all-models"
+              :value="1"
+              v-model="filter"
             />
             <span class="radio__text">Все модели</span>
             <span class="radio__icon"></span>
@@ -21,6 +23,8 @@
               class="radio__input"
               name="models"
               id="economy-models"
+              :value="2"
+              v-model="filter"
             />
             <span class="radio__text">Эконом</span>
             <span class="radio__icon"></span>
@@ -33,6 +37,8 @@
               class="radio__input"
               name="models"
               id="premium-models"
+              :value="3"
+              v-model="filter"
             />
             <span class="radio__text">Премиум</span>
             <span class="radio__icon"></span>
@@ -42,53 +48,17 @@
     </fieldset>
     <fieldset>
       <ul class="order-form__models order-models">
-        <li class="order-models__item">
-          <div class="order-models__title">ELANTRA</div>
-          <div class="order-models__price">12 000 - 25 000 ₽</div>
-          <div class="order-models__img-wrapper">
-            <img
-              src="~@/assets/img/car-example.png"
-              alt="Изображение автомобиля"
-              class="order-models__img"
-            />
-          </div>
-        </li>
-        <li class="order-models__item order-models__item--active">
-          <div class="order-models__title">i30 N</div>
-          <div class="order-models__price">10 000 - 32 000 ₽</div>
-          <div class="order-models__img-wrapper">
-            <img
-              src="~@/assets/img/car-example.png"
-              alt="Изображение автомобиля"
-              class="order-models__img"
-            />
-          </div>
-        </li>
-        <li class="order-models__item">
-          <div class="order-models__title">ELANTRA</div>
-          <div class="order-models__price">12 000 - 25 000 ₽</div>
-          <div class="order-models__img-wrapper">
-            <img
-              src="~@/assets/img/car-example.png"
-              alt="Изображение автомобиля"
-              class="order-models__img"
-            />
-          </div>
-        </li>
-        <li class="order-models__item">
-          <div class="order-models__title">ELANTRA</div>
-          <div class="order-models__price">12 000 - 25 000 ₽</div>
-          <div class="order-models__img-wrapper">
-            <img
-              src="~@/assets/img/car-example.png"
-              alt="Изображение автомобиля"
-              class="order-models__img"
-            />
-          </div>
-        </li>
-        <li class="order-models__item">
-          <div class="order-models__title">ELANTRA</div>
-          <div class="order-models__price">12 000 - 25 000 ₽</div>
+        <li
+          class="order-models__item"
+          :class="{
+            'order-models__item--active': stepTwo.chosenModel === cars[idx],
+          }"
+          v-for="(item, idx) in cars"
+          :key="item.id"
+          @click.prevent="pickModel(idx)"
+        >
+          <div class="order-models__title">{{ item.model }}</div>
+          <div class="order-models__price">{{ item.price }}</div>
           <div class="order-models__img-wrapper">
             <img
               src="~@/assets/img/car-example.png"
@@ -101,3 +71,68 @@
     </fieldset>
   </form>
 </template>
+
+<script>
+import { required } from 'vuelidate/lib/validators';
+export default {
+  data() {
+    return {
+      stepTwo: {
+        chosenModel: '',
+      },
+      filter: '',
+      cars: [
+        {
+          model: 'ELANTRA',
+          price: '12 000 - 25 000 ₽',
+        },
+        {
+          model: 'i30 N',
+          price: '10 000 - 32 000 ₽',
+        },
+        {
+          model: 'ELANTRA',
+          price: '12 000 - 25 000 ₽',
+        },
+        {
+          model: 'i30 N',
+          price: '10 000 - 32 000 ₽',
+        },
+        {
+          model: 'ELANTRA',
+          price: '12 000 - 25 000 ₽',
+        },
+        {
+          model: 'i30 N',
+          price: '10 000 - 32 000 ₽',
+        },
+        {
+          model: 'ELANTRA',
+          price: '12 000 - 25 000 ₽',
+        },
+      ],
+    };
+  },
+  methods: {
+    pickModel(val) {
+      this.stepTwo.chosenModel = this.cars[val];
+    },
+  },
+  validations: {
+    stepTwo: {
+      chosenModel: {
+        required,
+      },
+    },
+  },
+  watch: {
+    'stepTwo.chosenModel': function (val) {
+      this.$store.commit('upd_order_details', val);
+      this.$store.commit('upd_steps', {
+        step: 2,
+        formStatus: !this.$v.stepTwo.chosenModel.$invalid,
+      });
+    },
+  },
+};
+</script>
