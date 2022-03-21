@@ -3,8 +3,11 @@
     ref="map"
     v-if="showMap"
     :coords="coords"
+    :options="{
+      suppressMapOpenBlock: true,
+    }"
     zoom="3"
-    @map-was-initialized="workWithMap"
+    @map-was-initialized="loadMap"
   >
   </yandex-map>
 </template>
@@ -20,7 +23,6 @@ export default {
       markers: [],
       pickedAddress: '',
       showMap: false,
-      mapObj: '',
     };
   },
   computed: {
@@ -32,18 +34,41 @@ export default {
     },
   },
   methods: {
-    async workWithMap(payload) {
+    async loadMap(payload) {
       await loadYmap();
 
       var myMap = payload;
-      this.mapObj = payload;
 
-      for (let item of this.allMarkers) {
+      myMap.controls.remove('geolocationControl');
+      myMap.controls.remove('searchControl');
+      myMap.controls.remove('trafficControl');
+      myMap.controls.remove('typeSelector');
+      myMap.controls.remove('fullscreenControl');
+      myMap.controls.remove('rulerControl');
+
+      this.handleMap(this.allMarkers);
+    },
+    async handleMap(payload) {
+      await loadYmap();
+
+      var mapComponent = this.$refs.map;
+      var myMap = mapComponent.myMap;
+
+      if (this.currentAddressPoints.length) {
+        myMap.geoObjects.removeAll();
+      }
+
+      for (let item of payload) {
         ymaps.geocode(item).then(function (res) {
           var firstGeoObject = res.geoObjects.get(0);
-
+          firstGeoObject.options.set('preset', 'islands#darkGreenCircleIcon');
           firstGeoObject.properties.set('iconCaption', item);
           myMap.geoObjects.add(firstGeoObject);
+
+          var coords = firstGeoObject.geometry.getCoordinates();
+          if (payload.length === 1) {
+            myMap.setCenter(coords, 14, { duration: 300 });
+          }
         });
       }
 
@@ -52,11 +77,6 @@ export default {
         let coords = e.get('target')['properties'].get('iconCaption');
         self.pickedAddress = coords;
       });
-
-      myMap.geoObjects.options.set(
-        'iconImageHref',
-        'https://sandbox.api.maps.yandex.net/examples/ru/2.1/icon_customImage/images/ball.png'
-      );
     },
   },
   watch: {
@@ -66,30 +86,8 @@ export default {
       }
     },
     currentAddressPoints: {
-      handler: async function (val) {
-        await loadYmap();
-
-        var mapComponent = this.$refs.map;
-        var myMap = mapComponent.myMap;
-        myMap.geoObjects.removeAll();
-
-        for (let item of val) {
-          ymaps.geocode(item).then(function (res) {
-            var firstGeoObject = res.geoObjects.get(0);
-            var coords = firstGeoObject.geometry.getCoordinates();
-            firstGeoObject.properties.set('iconCaption', item);
-            myMap.geoObjects.add(firstGeoObject);
-            if (val.length === 1) {
-              myMap.setCenter(coords, 14, { duration: 300 });
-            }
-          });
-        }
-
-        let self = this;
-        myMap.geoObjects.events.add('click', function (e) {
-          let coords = e.get('target')['properties'].get('iconCaption');
-          self.pickedAddress = coords;
-        });
+      handler: function (val) {
+        this.handleMap(val);
       },
     },
     currentAddress: {
@@ -117,5 +115,10 @@ export default {
 
 .ymap-container {
   height: 350px;
+}
+
+[class*='ymaps-2'][class*='-ground-pane'] {
+  filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='grayscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0'/></filter></svg>#grayscale");
+  -webkit-filter: grayscale(100%);
 }
 </style>
