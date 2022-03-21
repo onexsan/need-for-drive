@@ -1,46 +1,47 @@
 <template>
   <form class="order-main__form order-form">
-    <fieldset>
-      <div
-        class="form-group order-form__form-group order-form__form-group--grid"
-      >
-        <label for="order-city" class="order-form__label">Город</label>
-        <input
-          type="search"
-          name="order-city"
-          id="order-city"
-          class="custom-input order-form__input form-control"
-          placeholder="Начните вводить город..."
-          v-model="stepOne.city"
-        />
-        <label for="order-place" class="order-form__label">Пункт выдачи</label>
-        <input
-          type="search"
-          name="order-place"
-          id="order-place"
-          class="custom-input order-form__input form-control"
-          placeholder="Начните вводить пункт..."
-          v-model="stepOne.place"
-        />
-      </div>
-    </fieldset>
-    <fieldset>
-      <div class="form-group order-form__form-group">
-        <legend class="order-form__legend">Выбрать на карте:</legend>
-        <div class="order-form__img-placeholder">
-          <img
-            src="~@/assets/img/order-map.png"
-            alt="Карта пунктов выдачи"
-            class="order-form__map"
+    <Loader v-if="stepOneData.status === 'loading'" />
+    <template v-else>
+      <fieldset>
+        <div class="form-group order-form__form-group">
+          <SearchAutocomplete
+            inputID="order-city"
+            inputLabel="Город"
+            :items="filteredCities"
+            :fromMap="fromMap"
+            @updData="updData"
+          />
+          <SearchAutocomplete
+            inputID="order-place"
+            inputLabel="Пункт выдачи"
+            :items="filteredPoints"
+            @updData="updData"
+            :fromMap="fromMap"
+            :disabled="isPointDisabled"
           />
         </div>
-      </div>
-    </fieldset>
+      </fieldset>
+      <fieldset>
+        <div class="form-group order-form__form-group">
+          <legend class="order-form__legend">Выбрать на карте:</legend>
+          <Map
+            :allMarkers="allMarkers"
+            :currentAddress="stepOne.city.name ? stepOne.city.name : ''"
+            @updAddress="updAddress"
+          />
+        </div>
+      </fieldset>
+    </template>
   </form>
 </template>
 
 <script>
 import { required } from 'vuelidate/lib/validators';
+import { mapState } from 'vuex';
+import SearchAutocomplete from '@/components/common/SearchAutocomplete.vue';
+import Loader from '@/components/common/Loader.vue';
+import Map from '@/components/common/Map.vue';
+
 export default {
   data() {
     return {
@@ -48,11 +49,77 @@ export default {
         city: '',
         place: '',
       },
+      filteredPoints: [],
+      fromMap: {
+        pwz: '',
+        city: '',
+      },
     };
   },
   computed: {
+    ...mapState(['stepOneData']),
+    filteredCities() {
+      if (this.stepOneData.cities && this.stepOneData.points) {
+        let arrayOfCities = [];
+        for (let item of this.stepOneData.cities) {
+          let pwz = this.stepOneData.points.find(
+            (el) => el.cityId !== null && el.cityId.name === item.name
+          );
+
+          if (pwz !== undefined) {
+            arrayOfCities.push(item);
+          }
+        }
+        return arrayOfCities;
+      }
+      return null;
+    },
     isFormFilled() {
       return this.$v.form;
+    },
+    isPointDisabled() {
+      if (
+        this.stepOne.city === '' ||
+        (this.stepOne.city && Object.keys(this.stepOne.city).length === 0)
+      ) {
+        return true;
+      }
+      return false;
+    },
+    allMarkers() {
+      if (this.stepOneData.points) {
+        return this.stepOneData.points
+          .map(function (el) {
+            if (el.cityId !== null) {
+              return `${el.cityId.name}; ${el.address}`;
+            }
+          })
+          .filter((el) => el !== undefined);
+      }
+      return null;
+    },
+  },
+  methods: {
+    updData(data) {
+      if (data.type === 'Город') {
+        this.stepOne.city = data.value;
+      }
+      if (data.type === 'Пункт выдачи') {
+        this.stepOne.place = data.value;
+      }
+    },
+    updAddress(val) {
+      if (val !== undefined) {
+        let cityName = val.split(';')[0];
+        let pwzName = val.split(';')[1].replace(/^\s+|\s+$/g, '');
+        let city = this.filteredCities.find((el) => el.name.includes(cityName));
+        let pwz = this.stepOneData.points.find((el) =>
+          el.address.includes(pwzName)
+        );
+        this.fromMap.pwz = {};
+        this.fromMap.pwz = pwz;
+        this.fromMap.city = city;
+      }
     },
   },
   validations: {
@@ -80,7 +147,13 @@ export default {
         });
       },
       deep: true,
+      immediate: true,
     },
+  },
+  components: {
+    SearchAutocomplete,
+    Map,
+    Loader,
   },
 };
 </script>
