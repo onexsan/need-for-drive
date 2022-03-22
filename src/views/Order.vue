@@ -18,7 +18,6 @@
             @click="currentStep = step.id"
           >
             <div class="order-nav__link">{{ step.title }}</div>
-
           </li>
           <li
             class="order-nav__item"
@@ -30,7 +29,6 @@
             @click="currentStep = 4"
           >
             <div class="order-nav__link">Итого</div>
-
           </li>
         </ul>
       </div>
@@ -313,7 +311,7 @@ export default {
   },
   methods: {},
   async mounted() {
-    await this.$store.dispatch('getOrderStatus', 'Новые');
+    await this.$store.dispatch('getOrderStatus', 'Подтвержденные');
     await this.$store.dispatch('getStepOneData');
     await this.$store.dispatch('getCars');
     await this.$store.dispatch('getStepThreeData');
