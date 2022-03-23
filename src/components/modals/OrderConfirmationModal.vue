@@ -38,7 +38,9 @@ export default {
   watch: {
     'orderRequest.response': {
       handler: function (val) {
-        if (val.id && val.id !== '' && val.id !== undefined) {
+        let orderIdAvailable = val.id && val.id !== '' && val.id !== undefined;
+
+        if (orderIdAvailable) {
           this.$router.push(`/order-details/${val.id}`);
         }
       },
