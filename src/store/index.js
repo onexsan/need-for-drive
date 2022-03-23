@@ -10,6 +10,11 @@ export default new Vuex.Store({
       status: '',
     },
     token: localStorage.getItem('token') || '',
+    cars: {
+      status: '',
+      list: [],
+      categories: [],
+    },
     stepOneData: {
       cities: [],
       points: [],
@@ -31,19 +36,25 @@ export default new Vuex.Store({
       let block = state[payload];
       block.status = '';
     },
-    error_loading(state, payload) {
-      let block = state[payload];
-      block.status = 'error';
-    },
     auth_success(state, token) {
       state.auth.status = 'success';
       state.token = token;
+    },
+    throw_error(state, payload) {
+      let block = state[payload];
+      block.status = 'error';
     },
     upd_cities(state, payload) {
       state.stepOneData.cities = payload;
     },
     upd_points(state, payload) {
       state.stepOneData.points = payload;
+    },
+    upd_cars(state, payload) {
+      state.cars.list = payload;
+    },
+    upd_categories(state, payload) {
+      state.cars.categories = payload;
     },
     upd_order_details(state, payload) {
       let merged = { ...state.orderDetails, ...payload };
@@ -79,7 +90,7 @@ export default new Vuex.Store({
         commit('auth_success', token);
       } catch (error) {
         console.log(error);
-        commit('error_loading', 'auth');
+        commit('throw_error', 'auth');
         localStorage.removeItem('token');
       }
     },
@@ -103,9 +114,35 @@ export default new Vuex.Store({
         }
       } catch (error) {
         console.log(error);
-        commit('error_loading', 'stepOneData');
+        commit('throw_error', 'stepOneData');
       } finally {
         commit('finish_loading', 'stepOneData');
+      }
+    },
+    async getCars({ commit }) {
+      commit('start_loading', 'cars');
+      try {
+        let cars = await axios({
+          method: 'get',
+          url: '/db/car',
+        });
+        if (cars.data.data) {
+          commit('upd_cars', cars.data.data);
+        }
+
+        let category = await axios({
+          method: 'get',
+          url: '/db/category',
+        });
+
+        if (category.data.data) {
+          commit('upd_categories', category.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+        commit('throw_error', 'cars');
+      } finally {
+        commit('finish_loading', 'cars');
       }
     },
   },
