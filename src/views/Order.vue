@@ -57,11 +57,11 @@
                 </li>
                 <li
                   class="details-list__item details-item"
-                  v-if="orderDetails.model"
+                  v-if="orderDetails.name"
                 >
                   <div class="details-item__title">Модель</div>
                   <div class="details-item__value">
-                    {{ orderDetails.model }}
+                    {{ orderDetails.name }}
                   </div>
                 </li>
                 <li
@@ -113,8 +113,8 @@
                   <div class="details-item__value">Да</div>
                 </li>
               </ul>
-              <div class="order-details__price">
-                <span>Цена:</span> 16 000 ₽
+              <div class="order-details__price" v-if="countedPrice">
+                <span>Цена:</span> {{ countedPrice }} ₽
               </div>
             </template>
 
@@ -222,10 +222,17 @@ export default {
       }
       return null;
     },
+    countedPrice() {
+      if (this.formDetails) {
+        return this.formDetails.priceMin;
+      }
+      return null;
+    },
   },
   methods: {},
   async mounted() {
     await this.$store.dispatch('getStepOneData');
+    await this.$store.dispatch('getCars');
   },
 };
 </script>

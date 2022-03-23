@@ -1,9 +1,11 @@
 <template>
   <div class="order__summary order-summary">
-    <div class="order-summary__model" v-if="orderDetails.model">
-      {{ orderDetails.model }}
+    <div class="order-summary__model" v-if="orderDetails.name">
+      {{ orderDetails.name }}
     </div>
-    <div class="order-summary__license">K 761 HA 73</div>
+    <div class="order-summary__license" v-if="orderDetails.number">
+      {{ orderDetails.number }}
+    </div>
     <div class="order-summary__extra" v-if="orderDetails.extraFuel === true">
       <span>Топливо</span> 100%
     </div>
@@ -24,7 +26,9 @@
       {{ orderDetails.dateFrom.split('-').reverse().join('.') }}
     </div>
     <img
-      src="~@/assets/img/car-example.png"
+      v-image-fall-back
+      v-if="orderDetails.thumbnail && orderDetails.thumbnail.path"
+      :src="orderDetails.thumbnail.path"
       alt="Выбранная модель автомобиля"
       class="order-summary__img"
     />

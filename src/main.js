@@ -33,6 +33,10 @@ const ySettings = {
 };
 Vue.use(YmapPlugin, ySettings);
 
+import ImageFallBack from './imagefallback';
+
+Vue.directive('image-fall-back', ImageFallBack);
+
 Vue.config.productionTip = false;
 
 new Vue({
