@@ -19,17 +19,20 @@
                 Ваш заказ
                 {{ orderStatus }}
               </div>
-              <div class="order-summary__model" v-if="order.data.carId.name">
+              <div
+                class="order-summary__model"
+                v-if="carFieldAvailable('name')"
+              >
                 {{ order.data.carId.name }}
               </div>
               <div
                 class="order-summary__license"
-                v-if="order.data.carId.number"
+                v-if="carFieldAvailable('number')"
               >
                 {{ order.data.carId.number }}
               </div>
-              <div class="order-summary__extra" v-if="order.data.isFullTank">
-                <span>Топливо</span> 100%
+              <div class="order-summary__extra" v-if="fuelDataAvailable">
+                <span>Топливо:</span> {{ fuelDataAvailable }}
               </div>
               <div
                 class="order-summary__extra"
@@ -48,7 +51,9 @@
               <img
                 v-image-fall-back
                 v-if="
-                  order.data.carId.thumbnail && order.data.carId.thumbnail.path
+                  order.data.carId &&
+                  order.data.carId.thumbnail &&
+                  order.data.carId.thumbnail.path
                 "
                 :src="order.data.carId.thumbnail.path"
                 alt="Выбранная модель автомобиля"
@@ -61,7 +66,7 @@
             <ul class="order-details__list details-list">
               <li
                 class="details-list__item details-item"
-                v-if="order.data.cityId.name || order.data.pointId.address"
+                v-if="cityOrAddressAvailable"
               >
                 <div class="details-item__title">Пункт выдачи</div>
                 <div class="details-item__value">
@@ -70,7 +75,7 @@
               </li>
               <li
                 class="details-list__item details-item"
-                v-if="order.data.carId.name"
+                v-if="carFieldAvailable('name')"
               >
                 <div class="details-item__title">Модель</div>
                 <div class="details-item__value">
@@ -97,7 +102,7 @@
               </li>
               <li
                 class="details-list__item details-item"
-                v-if="order.data.rateId.rateTypeId.name"
+                v-if="orderRateAvailable"
               >
                 <div class="details-item__title">Тариф</div>
                 <div class="details-item__value">
@@ -252,10 +257,38 @@ export default {
       }
       return null;
     },
+    cityOrAddressAvailable() {
+      if (this.order) {
+        return this.order.data.cityId.name || this.order.data.pointId.address;
+      }
+      return null;
+    },
+    orderRateAvailable() {
+      if (this.order) {
+        return this.order.data.rateId && this.order.data.rateId.rateTypeId.name;
+      }
+      return null;
+    },
+    fuelDataAvailable() {
+      if (this.order) {
+        return this.order.data.isFullTank
+          ? '100%'
+          : this.order.data.tank
+          ? `${this.orderDetails.tank}%`
+          : '';
+      }
+      return null;
+    },
   },
   methods: {
     padTo2Digits(num) {
       return num.toString().padStart(2, '0');
+    },
+    carFieldAvailable(key) {
+      if (this.order) {
+        return this.order.data.carId && this.order.data.carId[key];
+      }
+      return null;
     },
   },
   async mounted() {
