@@ -78,10 +78,11 @@ export default {
       return this.$v.form;
     },
     isPointDisabled() {
-      if (
+      let areCityPointsUnavailable =
         this.stepOne.city === '' ||
-        (this.stepOne.city && Object.keys(this.stepOne.city).length === 0)
-      ) {
+        (this.stepOne.city && Object.keys(this.stepOne.city).length === 0);
+
+      if (areCityPointsUnavailable) {
         return true;
       }
       return false;
@@ -109,7 +110,9 @@ export default {
       }
     },
     updAddress(val) {
-      if (val !== undefined) {
+      let addressIsDefined = val !== undefined;
+
+      if (addressIsDefined) {
         let cityName = val.split(';')[0];
         let pwzName = val.split(';')[1].replace(/^\s+|\s+$/g, '');
         let city = this.filteredCities.find((el) => el.name.includes(cityName));
@@ -130,10 +133,11 @@ export default {
   watch: {
     stepOne: {
       handler: function (val) {
-        let city = val.city.name;
-        if (city && city !== undefined) {
+        let isCityDefined = val.city.name && val.city.name !== undefined;
+
+        if (isCityDefined) {
           let filteredPoints = this.stepOneData.points.filter(
-            (el) => el.cityId !== null && el.cityId.name === city
+            (el) => el.cityId !== null && el.cityId.name === val.city.name
           );
           this.filteredPoints = filteredPoints;
         } else {
