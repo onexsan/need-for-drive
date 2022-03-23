@@ -108,7 +108,9 @@ export default {
   },
   watch: {
     'stepTwo.chosenModel': function (val) {
-      this.$store.commit('upd_order_details', val);
+      let chosenCarData = val;
+
+      this.$store.commit('upd_order_details', chosenCarData);
       this.$store.commit('upd_steps', {
         step: 2,
         formStatus: !this.$v.stepTwo.chosenModel.$invalid,
@@ -116,7 +118,8 @@ export default {
     },
     cars: {
       handler: function (val) {
-        if (val != undefined) {
+        let isCarsListDefined = val !== undefined;
+        if (isCarsListDefined) {
           this.clearCars = val.list.filter((el) => el.priceMin < el.priceMax);
           this.carsList = this.clearCars;
         }
@@ -126,8 +129,12 @@ export default {
     },
     filter: {
       handler: function (val) {
-        if (val !== undefined) {
-          if (val === 1) {
+        let isCarCategoryPicked = val !== undefined;
+
+        if (isCarCategoryPicked) {
+          let showAllCars = val === 1;
+
+          if (showAllCars) {
             this.carsList = this.clearCars;
           } else {
             let cars = this.clearCars.filter(
