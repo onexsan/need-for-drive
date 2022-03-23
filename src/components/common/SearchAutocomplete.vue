@@ -89,12 +89,15 @@ export default {
     search: {
       immediate: true,
       handler: function (val) {
-        if (val === '') {
+        let searchStringIsEmpty = val === '';
+        let searchStringIsDefined = val !== '' && val !== undefined;
+
+        if (searchStringIsEmpty) {
           this.chosenResult = {};
-        } else if (val !== '' && val !== undefined) {
-          let isFound = this.items.find((el) => el.name === val);
-          if (isFound !== undefined) {
-            this.chosenResult = isFound;
+        } else if (searchStringIsDefined) {
+          let result = this.items.find((el) => el.name === val);
+          if (result !== undefined) {
+            this.chosenResult = result;
           }
         }
         this.$emit('updData', {
