@@ -8,10 +8,7 @@
             class="order-nav__item"
             :class="{
               'order-nav__item--active': currentStep === step.id,
-              'order-nav__item--allowed':
-                currentStep >= step.id ||
-                stepsCompleted[step.id] === true ||
-                stepsCompleted[step.id - 1] === true,
+              'order-nav__item--allowed': isNavLinkAvailable(step.id),
             }"
             v-for="step in steps"
             :key="step.id"
@@ -24,7 +21,7 @@
             :class="{
               'order-nav__item--active': currentStep === 4,
               'order-nav__item--allowed':
-                areAllStepsFilled && !isPriceLess && !isPriceOver,
+                areAllStepsFilled && isMinPriceReached && !isMaxPriceExceeded,
             }"
             @click="currentStep = 4"
           >
@@ -94,21 +91,21 @@
                 </li>
                 <li
                   class="details-list__item details-item"
-                  v-if="orderDetails.extraFuel === true"
+                  v-if="orderDetails.extraFuel"
                 >
                   <div class="details-item__title">Полный бак</div>
                   <div class="details-item__value">Да</div>
                 </li>
                 <li
                   class="details-list__item details-item"
-                  v-if="orderDetails.extraBabyChair === true"
+                  v-if="orderDetails.extraBabyChair"
                 >
                   <div class="details-item__title">Детское кресло</div>
                   <div class="details-item__value">Да</div>
                 </li>
                 <li
                   class="details-list__item details-item"
-                  v-if="orderDetails.extraRightSide === true"
+                  v-if="orderDetails.extraRightSide"
                 >
                   <div class="details-item__title">Правый руль</div>
                   <div class="details-item__value">Да</div>
@@ -119,14 +116,14 @@
               </div>
               <div
                 class="order-details__price order-details__price--error"
-                v-if="isPriceLess"
+                v-if="!isMinPriceReached"
               >
                 <span>Минимальная цена:</span>
                 {{ orderDetails.priceMin }} ₽
               </div>
               <div
                 class="order-details__price order-details__price--error"
-                v-if="isPriceOver"
+                v-if="isMaxPriceExceeded"
               >
                 <span>Превышена максимальная цена:</span>
                 {{ orderDetails.priceMax }} ₽
@@ -139,7 +136,7 @@
               class="btn order-details__btn"
               v-if="currentStep < 3"
               @click="currentStep += 1"
-              :disabled="stepsCompleted[currentStep] === false"
+              :disabled="!stepsCompleted[currentStep]"
             >
               {{ currentStep === 1 ? 'Выбрать модель' : 'Дополнительно' }}
             </button>
@@ -147,12 +144,7 @@
               class="btn order-details__btn"
               v-if="currentStep === 3"
               @click="currentStep += 1"
-              :disabled="
-                stepsCompleted[currentStep] === false ||
-                !areAllStepsFilled ||
-                isPriceLess ||
-                isPriceOver
-              "
+              :disabled="isFinalStepDisabled"
             >
               Итого
             </button>
@@ -174,7 +166,7 @@
         </div>
       </div>
     </main>
-    <OrderConfirmationModal aim="Подтвердить" />
+    <OrderConfirmationModal modalPurpose="Подтвердить" />
   </section>
 </template>
 
@@ -252,64 +244,87 @@ export default {
           ? this.orderDetails.priceMin
           : null;
       } else if (this.orderDetails.rate && this.duration) {
-        let days =
-          this.duration.hours > 0 || this.duration.minutes > 0
-            ? this.duration.days + 1
-            : this.duration.days;
-        let weeks = Math.ceil(days / 7);
-        let months = Math.ceil(days / 30);
-        let minutes =
-          this.duration.days * 1440 +
-          this.duration.hours * 60 +
-          this.duration.minutes;
-
-        let price = '';
-        if (this.orderDetails.rate === 'Суточный') {
-          price = days * this.orderDetails.ratePrice;
-        } else if (this.orderDetails.rate === 'Недельный (Акция!)') {
-          price = weeks * this.orderDetails.ratePrice;
-        } else if (this.orderDetails.rate === 'Месячный') {
-          price = months * this.orderDetails.ratePrice;
-        } else if (this.orderDetails.rate === 'Поминутно') {
-          price = minutes * this.orderDetails.ratePrice;
-        }
-
-        if (this.orderDetails.extraBabyChair) {
-          price += 200;
-        }
-        if (this.orderDetails.extraFuel) {
-          price += 500;
-        }
-        if (this.orderDetails.extraRightSide) {
-          price += 1600;
-        }
-
+        let price = this.calcPrice(
+          this.duration,
+          this.orderDetails.rate,
+          this.orderDetails.ratePrice,
+          this.orderDetails.extraBabyChair,
+          this.orderDetails.extraFuel,
+          this.orderDetails.extraRightSide
+        );
         return price;
       }
       return null;
     },
-    isPriceLess() {
-      if (
+    isMinPriceReached() {
+      let isPriceIncorrect =
         this.countedPrice !== null &&
         this.countedPrice < this.orderDetails.priceMin &&
-        this.orderDetails.priceMax > this.orderDetails.priceMin
-      ) {
-        return true;
+        this.orderDetails.priceMax > this.orderDetails.priceMin;
+
+      if (isPriceIncorrect) {
+        return false;
       }
-      return false;
+      return true;
     },
-    isPriceOver() {
-      if (
+    isMaxPriceExceeded() {
+      let isPriceIncorrect =
         this.countedPrice !== null &&
         this.countedPrice > this.orderDetails.priceMax &&
-        this.orderDetails.priceMax > this.orderDetails.priceMin
-      ) {
+        this.orderDetails.priceMax > this.orderDetails.priceMin;
+
+      if (isPriceIncorrect) {
         return true;
       }
       return false;
     },
+    isFinalStepDisabled() {
+      return (
+        this.stepsCompleted[this.currentStep] === false ||
+        !this.areAllStepsFilled ||
+        !this.isMinPriceReached ||
+        this.isMaxPriceExceeded
+      );
+    },
   },
-  methods: {},
+  methods: {
+    calcPrice(time, rate, ratePrice, hasBabyChair, hasFullTank, hasRightWheel) {
+      let days = time.hours > 0 || time.minutes > 0 ? time.days + 1 : time.days;
+      let weeks = Math.ceil(days / 7);
+      let months = Math.ceil(days / 30);
+      let minutes = time.days * 1440 + time.hours * 60 + time.minutes;
+
+      let price = '';
+      if (rate === 'Суточный') {
+        price = days * ratePrice;
+      } else if (rate === 'Недельный (Акция!)') {
+        price = weeks * ratePrice;
+      } else if (rate === 'Месячный') {
+        price = months * ratePrice;
+      } else if (rate === 'Поминутно') {
+        price = minutes * ratePrice;
+      }
+
+      if (hasBabyChair) {
+        price += 200;
+      }
+      if (hasFullTank) {
+        price += 500;
+      }
+      if (hasRightWheel) {
+        price += 1600;
+      }
+
+      return price;
+    },
+    isNavLinkAvailable(id) {
+      return (
+        this.currentStep >= id ||
+        this.stepsCompleted[id] === true ||
+        this.stepsCompleted[id - 1] === true
+      );
+    },
+  },
   async mounted() {
     await this.$store.dispatch('getOrderStatus', 'Подтвержденные');
     await this.$store.dispatch('getStepOneData');
@@ -318,7 +333,9 @@ export default {
   },
   watch: {
     countedPrice: function (val) {
-      if (val !== null && val !== undefined) {
+      let isPriceCorrect = val !== null && val !== undefined;
+
+      if (isPriceCorrect) {
         this.$store.commit('upd_order_price', val);
       }
     },

@@ -4,23 +4,23 @@
     class="order-confirmation-modal"
     :hide-header="true"
   >
-    <p class="order-confirmation-modal__text">{{ aim }} заказ</p>
+    <p class="order-confirmation-modal__text">{{ modalPurpose }} заказ</p>
     <template #modal-footer>
       <button
-        v-if="aim === `Подтвердить`"
+        v-if="modalPurpose === `Подтвердить`"
         class="btn"
         @click="sendOrder"
         :disabled="orderRequest.status === 'loading'"
       >
-        {{ aim }}
+        {{ modalPurpose }}
       </button>
       <button
-        v-else-if="aim === `Отменить`"
+        v-else-if="modalPurpose === `Отменить`"
         class="btn"
         @click="cancelOrder"
         :disabled="orderRequest.status === 'loading'"
       >
-        {{ aim }}
+        {{ modalPurpose }}
       </button>
       <button
         class="btn btn-danger"
@@ -36,7 +36,7 @@
 import { mapState } from 'vuex';
 
 export default {
-  props: ['aim'],
+  props: ['modalPurpose'],
   computed: {
     ...mapState(['orderRequest']),
   },
@@ -52,14 +52,17 @@ export default {
   watch: {
     'orderRequest.response': {
       handler: function (val) {
-        if (val.id && val.id !== '' && val.id !== undefined) {
+        let orderIdAvailable = val.id && val.id !== '' && val.id !== undefined;
+
+        if (orderIdAvailable) {
           this.$router.push(`/order-details/${val.id}`).catch((err) => {
-            if (
+            let navigationIsNotDuplicated =
               err.name !== 'NavigationDuplicated' &&
               !err.message.includes(
                 'Avoided redundant navigation to current location'
-              )
-            ) {
+              );
+
+            if (navigationIsNotDuplicated) {
               console.log(err);
             } else {
               this.$router.go();

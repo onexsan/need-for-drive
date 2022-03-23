@@ -17,11 +17,7 @@
                 v-if="order.data.orderStatusId.name"
               >
                 Ваш заказ
-                {{
-                  order.data.orderStatusId.name === 'Отмененые'
-                    ? 'отменен'
-                    : 'подтверждён'
-                }}
+                {{ orderStatus }}
               </div>
               <div class="order-summary__model" v-if="order.data.carId.name">
                 {{ order.data.carId.name }}
@@ -31,12 +27,6 @@
                 v-if="order.data.carId.number"
               >
                 {{ order.data.carId.number }}
-              </div>
-              <div
-                class="order-summary__extra"
-                v-if="order.data.orderStatusId.name"
-              >
-                <span>Статус закзаа:</span> {{ order.data.orderStatusId.name }}
               </div>
               <div class="order-summary__extra" v-if="order.data.isFullTank">
                 <span>Топливо</span> 100%
@@ -69,19 +59,13 @@
           <div class="order-main__details order-details">
             <h3 class="order-details__title">Ваш заказ:</h3>
             <ul class="order-details__list details-list">
-              <li class="details-list__item details-item">
+              <li
+                class="details-list__item details-item"
+                v-if="order.data.cityId.name || order.data.pointId.address"
+              >
                 <div class="details-item__title">Пункт выдачи</div>
                 <div class="details-item__value">
-                  {{
-                    order.data.cityId.name ? `${order.data.cityId.name}` : ''
-                  }}
-                  {{
-                    order.data.pointId.address
-                      ? order.data.cityId.name
-                        ? `, ${order.data.pointId.address}`
-                        : order.data.pointId.address
-                      : ''
-                  }}
+                  {{ orderCity }}{{ orderPoint }}
                 </div>
               </li>
               <li
@@ -157,7 +141,7 @@
       </div>
     </main>
 
-    <OrderConfirmationModal aim="Отменить" />
+    <OrderConfirmationModal modalPurpose="Отменить" />
   </div>
 </template>
 
@@ -172,7 +156,8 @@ export default {
       return this.$route.params.id;
     },
     dateFrom() {
-      if (this.order.data.dateFrom) {
+      let isDateFromAvailable = this.order.data.dateFrom;
+      if (isDateFromAvailable) {
         let date = new Date(this.order.data.dateFrom);
         return (
           [
@@ -190,7 +175,8 @@ export default {
       return null;
     },
     dateTo() {
-      if (this.order.data.dateTo) {
+      let isDateToAvailable = this.order.data.dateTo;
+      if (isDateToAvailable) {
         let date = new Date(this.order.data.dateTo);
         return (
           [
@@ -208,7 +194,9 @@ export default {
       return null;
     },
     availableFrom() {
-      if (this.dateFrom) {
+      let isDateFromAvailable = this.dateFrom;
+
+      if (isDateFromAvailable) {
         return `${this.dateFrom.split(' ')[0].split('-').reverse().join('.')} ${
           this.dateFrom.split(' ')[1]
         }`;
@@ -216,7 +204,9 @@ export default {
       return null;
     },
     duration() {
-      if (this.dateFrom && this.dateTo) {
+      let datesAreAvailable = this.dateFrom && this.dateTo;
+
+      if (datesAreAvailable) {
         var delta =
           Math.abs(new Date(this.dateTo) - new Date(this.dateFrom)) / 1000;
 
@@ -233,6 +223,35 @@ export default {
       }
       return null;
     },
+    orderStatus() {
+      let isOrderDataAvailable =
+        this.order && this.order.data.orderStatusId.name;
+
+      if (isOrderDataAvailable) {
+        return this.order.data.orderStatusId.name === 'Отмененые'
+          ? 'отменен'
+          : 'подтверждён';
+      }
+      return null;
+    },
+    orderCity() {
+      if (this.order) {
+        return this.order.data.cityId.name
+          ? `${this.order.data.cityId.name}`
+          : '';
+      }
+      return null;
+    },
+    orderPoint() {
+      if (this.order) {
+        return this.order.data.pointId.address
+          ? this.order.data.cityId.name
+            ? `, ${this.order.data.pointId.address}`
+            : this.order.data.pointId.address
+          : '';
+      }
+      return null;
+    },
   },
   methods: {
     padTo2Digits(num) {
@@ -245,7 +264,9 @@ export default {
   watch: {
     orderID: {
       handler: async function (val) {
-        if (val !== undefined) {
+        let isOrderIdAvailable = val !== undefined;
+
+        if (isOrderIdAvailable) {
           await this.$store.dispatch('getOrder', val);
         }
       },
