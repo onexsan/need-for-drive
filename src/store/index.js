@@ -37,6 +37,10 @@ export default new Vuex.Store({
       2: false,
       3: false,
     },
+    order: {
+      status: '',
+      data: '',
+    },
   },
   mutations: {
     start_loading(state, payload) {
@@ -86,6 +90,9 @@ export default new Vuex.Store({
     upd_order_request(state, payload) {
       state.orderRequest.response = payload;
     },
+    upd_order(state, payload) {
+      state.order.data = payload;
+    },
   },
   actions: {
     async login({ commit }) {
@@ -134,13 +141,6 @@ export default new Vuex.Store({
         });
         if (point.data.data) {
           commit('upd_points', point.data.data);
-        }
-
-        let statuses = await axios('db/orderStatus');
-        if (statuses.data.data) {
-          let order = statuses.data.data.find((el) => el.name === 'Новые');
-          let orderID = order.id;
-          commit('upd_order_status', orderID);
         }
       } catch (error) {
         console.log(error);
@@ -222,6 +222,56 @@ export default new Vuex.Store({
         commit('throw_error', 'orderRequest');
       } finally {
         commit('finish_loading', 'orderRequest');
+      }
+    },
+    async getOrder({ commit }, payload) {
+      commit('start_loading', 'order');
+      try {
+        let orderData = await axios({
+          method: 'get',
+          url: `/db/order/${payload}`,
+        });
+        if (orderData.data.data) {
+          commit('upd_order', orderData.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+        commit('throw_error', 'order');
+      } finally {
+        commit('finish_loading', 'order');
+      }
+    },
+    async cancelOrder({ commit, state }, payload) {
+      commit('start_loading', 'orderRequest');
+      try {
+        let orderData = await axios({
+          method: 'put',
+          url: `/db/order/${payload}`,
+          data: {
+            orderStatusId: state.orderDetails.orderStatus,
+          },
+        });
+        console.log(orderData);
+        if (orderData.data.data) {
+          commit('upd_order_request', orderData.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+        commit('throw_error', 'orderRequest');
+      } finally {
+        commit('finish_loading', 'orderRequest');
+      }
+    },
+    async getOrderStatus({ commit }, payload) {
+      try {
+        let statuses = await axios('db/orderStatus');
+        if (statuses.data.data) {
+          let order = statuses.data.data.find((el) => el.name === payload);
+          let orderID = order.id;
+          commit('upd_order_status', orderID);
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
   },
