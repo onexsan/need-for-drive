@@ -34,18 +34,8 @@ export default {
     },
   },
   methods: {
-    async loadMap(payload) {
-      await loadYmap();
-
-      var myMap = payload;
-
-      myMap.controls.remove('geolocationControl');
-      myMap.controls.remove('searchControl');
-      myMap.controls.remove('trafficControl');
-      myMap.controls.remove('typeSelector');
-      myMap.controls.remove('fullscreenControl');
-      myMap.controls.remove('rulerControl');
-
+    async loadMap() {
+      this.removeMapControls();
       this.handleMap(this.allMarkers);
     },
     async handleMap(payload) {
@@ -78,21 +68,37 @@ export default {
         self.pickedAddress = coords;
       });
     },
+    async removeMapControls() {
+      await loadYmap();
+
+      var mapComponent = this.$refs.map;
+      var myMap = mapComponent.myMap;
+
+      myMap.controls.remove('geolocationControl');
+      myMap.controls.remove('searchControl');
+      myMap.controls.remove('trafficControl');
+      myMap.controls.remove('typeSelector');
+      myMap.controls.remove('fullscreenControl');
+      myMap.controls.remove('rulerControl');
+    },
   },
   watch: {
     pickedAddress: function (val) {
-      if (val !== '') {
+      let pickedAddressEmpty = val === ''
+      if (!pickedAddressEmpty) {
         this.$emit('updAddress', val);
       }
     },
     currentAddressPoints: {
       handler: function (val) {
-        this.handleMap(val);
+        let markersAddresses = val
+        this.handleMap(markersAddresses);
       },
     },
     currentAddress: {
       handler: async function (val) {
-        if (val === '') {
+        let isAddressEmpty = val === ''
+        if (isAddressEmpty) {
           await loadYmap();
 
           var mapComponent = this.$refs.map;

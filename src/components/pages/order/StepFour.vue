@@ -9,21 +9,19 @@
     <div class="order-summary__extra" v-if="orderDetails.extraFuel === true">
       <span>Топливо</span> 100%
     </div>
-    <div
-      class="order-summary__extra"
-      v-if="orderDetails.extraBabyChair === true"
-    >
+    <div class="order-summary__extra" v-if="fuelDataAvailable">
+      <span>Топливо</span>
+      {{ fuelDataAvailable }}%
+    </div>
+    <div class="order-summary__extra" v-if="orderDetails.extraBabyChair">
       С <span>детским креслом</span>
     </div>
-    <div
-      class="order-summary__extra"
-      v-if="orderDetails.extraRightSide === true"
-    >
+    <div class="order-summary__extra" v-if="orderDetails.extraRightSide">
       С <span>правым рулём</span>
     </div>
-    <div class="order-summary__extra" v-if="orderDetails.dateFrom">
+    <div class="order-summary__extra" v-if="availableFrom">
       <span>Доступна</span> с
-      {{ orderDetails.dateFrom.split('-').reverse().join('.') }}
+      {{ availableFrom }}
     </div>
     <img
       v-image-fall-back
@@ -40,6 +38,25 @@ import { mapState } from 'vuex';
 export default {
   computed: {
     ...mapState(['orderDetails']),
+    availableFrom() {
+      let startingDate = this.orderDetails.dateFrom;
+
+      if (startingDate) {
+        return `${this.orderDetails.dateFrom
+          .split(' ')[0]
+          .split('-')
+          .reverse()
+          .join('.')} ${startingDate.split(' ')[1]}`;
+      }
+      return null;
+    },
+    fuelDataAvailable() {
+      return this.orderDetails.extraFuel === true
+        ? '100'
+        : this.orderDetails.tank
+        ? this.orderDetails.tank
+        : 'Не указано';
+    },
   },
 };
 </script>
