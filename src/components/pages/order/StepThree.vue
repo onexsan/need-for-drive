@@ -196,6 +196,7 @@ export default {
         (el) => el.rateTypeId.name == val
       );
       this.stepThree.ratePrice = rateObj.price;
+      this.stepThree.rateID = rateObj.id;
     },
   },
   components: {

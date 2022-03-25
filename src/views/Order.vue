@@ -20,7 +20,8 @@
             class="order-nav__item"
             :class="{
               'order-nav__item--active': currentStep === 4,
-              'order-nav__item--allowed': areAllStepsFilled,
+              'order-nav__item--allowed':
+                areAllStepsFilled && isMinPriceReached && !isMaxPriceExceeded,
             }"
             @click="currentStep = 4"
           >
@@ -328,6 +329,15 @@ export default {
     await this.$store.dispatch('getStepOneData');
     await this.$store.dispatch('getCars');
     await this.$store.dispatch('getStepThreeData');
+  },
+  watch: {
+    countedPrice: function (val) {
+      let isPriceCorrect = val !== null && val !== undefined;
+
+      if (isPriceCorrect) {
+        this.$store.commit('upd_order_price', val);
+      }
+    },
   },
 };
 </script>
