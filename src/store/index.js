@@ -20,6 +20,10 @@ export default new Vuex.Store({
       points: [],
       status: '',
     },
+    stepThreeData: {
+      rates: [],
+      status: '',
+    },
     orderDetails: {},
     stepsCompleted: {
       1: false,
@@ -62,6 +66,9 @@ export default new Vuex.Store({
     },
     upd_steps(state, payload) {
       state.stepsCompleted[payload.step] = payload.formStatus;
+    },
+    upd_rates(state, payload) {
+      state.stepThreeData.rates = payload;
     },
   },
   actions: {
@@ -143,6 +150,23 @@ export default new Vuex.Store({
         commit('throw_error', 'cars');
       } finally {
         commit('finish_loading', 'cars');
+      }
+    },
+    async getStepThreeData({ commit }) {
+      commit('start_loading', 'stepThreeData');
+      try {
+        let rate = await axios({
+          method: 'get',
+          url: '/db/rate',
+        });
+        if (rate.data.data) {
+          commit('upd_rates', rate.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+        commit('throw_error', 'stepThreeData');
+      } finally {
+        commit('finish_loading', 'stepThreeData');
       }
     },
   },

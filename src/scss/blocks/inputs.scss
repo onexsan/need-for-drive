@@ -1,4 +1,5 @@
-input.form-control {
+input.form-control,
+form.order-form input.field-input {
   border: none;
   border-bottom: 1px solid $gray;
   border-radius: 0px;
@@ -135,5 +136,13 @@ input.form-control {
 
   .checkbox__input:checked ~ .checkbox__icon:after {
     display: block;
+  }
+}
+
+.date-time-picker .field.flex {
+  max-width: 224px;
+
+  @include lg-tablets {
+    max-width: none;
   }
 }

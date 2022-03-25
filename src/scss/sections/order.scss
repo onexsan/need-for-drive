@@ -187,7 +187,8 @@
     margin-bottom: 16px;
   }
 
-  &__input {
+  &__input,
+  input.field-input {
     max-width: 224px;
 
     @include lg-tablets {
@@ -253,6 +254,12 @@
 
     @include phones {
       font-size: 14px;
+    }
+
+    &--error {
+      span {
+        color: #a50707;
+      }
     }
   }
 
