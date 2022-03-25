@@ -6,6 +6,9 @@
     <div class="order-summary__license" v-if="orderDetails.number">
       {{ orderDetails.number }}
     </div>
+    <div class="order-summary__extra" v-if="orderDetails.extraFuel === true">
+      <span>Топливо</span> 100%
+    </div>
     <div class="order-summary__extra" v-if="fuelDataAvailable">
       <span>Топливо</span>
       {{ fuelDataAvailable }}%
