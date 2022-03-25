@@ -129,6 +129,7 @@ export default {
     },
     filter: {
       handler: function (val) {
+
         let isCarCategoryPicked = val !== undefined;
 
         if (isCarCategoryPicked) {
