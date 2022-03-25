@@ -24,7 +24,14 @@ export default new Vuex.Store({
       rates: [],
       status: '',
     },
-    orderDetails: {},
+    orderRequest: {
+      status: '',
+      response: '',
+    },
+    orderDetails: {
+      orderPrice: '',
+      orderStatus: '',
+    },
     stepsCompleted: {
       1: false,
       2: false,
@@ -69,6 +76,15 @@ export default new Vuex.Store({
     },
     upd_rates(state, payload) {
       state.stepThreeData.rates = payload;
+    },
+    upd_order_price(state, payload) {
+      state.orderDetails.orderPrice = payload;
+    },
+    upd_order_status(state, payload) {
+      state.orderDetails.orderStatus = payload;
+    },
+    upd_order_request(state, payload) {
+      state.orderRequest.response = payload;
     },
   },
   actions: {
@@ -119,6 +135,13 @@ export default new Vuex.Store({
         if (point.data.data) {
           commit('upd_points', point.data.data);
         }
+
+        let statuses = await axios('db/orderStatus');
+        if (statuses.data.data) {
+          let order = statuses.data.data.find((el) => el.name === 'Новые');
+          let orderID = order.id;
+          commit('upd_order_status', orderID);
+        }
       } catch (error) {
         console.log(error);
         commit('throw_error', 'stepOneData');
@@ -167,6 +190,38 @@ export default new Vuex.Store({
         commit('throw_error', 'stepThreeData');
       } finally {
         commit('finish_loading', 'stepThreeData');
+      }
+    },
+    async sendOrder({ commit, state }) {
+      commit('start_loading', 'orderRequest');
+      let data = {
+        orderStatusId: state.orderDetails.orderStatus,
+        cityId: state.orderDetails.city.id,
+        pointId: state.orderDetails.place.id,
+        carId: state.orderDetails.id,
+        color: state.orderDetails.color,
+        dateFrom: new Date(state.orderDetails.dateFrom).getTime(),
+        dateTo: new Date(state.orderDetails.dateTo).getTime(),
+        rateId: state.orderDetails.rateID,
+        price: state.orderDetails.orderPrice,
+        isFullTank: state.orderDetails.extraFuel,
+        isNeedChildChair: state.orderDetails.extraBabyChair,
+        isRightWheel: state.orderDetails.extraRightSide,
+      };
+      try {
+        let request = await axios({
+          method: 'post',
+          url: '/db/order',
+          data: data,
+        });
+        if (request.data.data) {
+          commit('upd_order_request', request.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+        commit('throw_error', 'orderRequest');
+      } finally {
+        commit('finish_loading', 'orderRequest');
       }
     },
   },
