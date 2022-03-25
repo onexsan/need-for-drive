@@ -166,7 +166,7 @@
         </div>
       </div>
     </main>
-    <OrderConfirmationModal />
+    <OrderConfirmationModal modalPurpose="Подтвердить" />
   </section>
 </template>
 
@@ -326,6 +326,7 @@ export default {
     },
   },
   async mounted() {
+    await this.$store.dispatch('getOrderStatus', 'Подтвержденные');
     await this.$store.dispatch('getStepOneData');
     await this.$store.dispatch('getCars');
     await this.$store.dispatch('getStepThreeData');
