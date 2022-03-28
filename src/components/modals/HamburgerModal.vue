@@ -39,20 +39,6 @@
               </svg>
             </a>
           </li>
-          <li class="socials__item">
-            <a href="#" class="socials__link">
-              <svg>
-                <use xlink:href="#icon-fb" class="socials__icon"></use>
-              </svg>
-            </a>
-          </li>
-          <li class="socials__item">
-            <a href="#" class="socials__link">
-              <svg>
-                <use xlink:href="#icon-ig" class="socials__icon"></use>
-              </svg>
-            </a>
-          </li>
         </ul>
       </div>
       <button class="hamburger-modal__lang-btn link link--lang">Eng</button>
