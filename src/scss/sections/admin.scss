@@ -1,0 +1,41 @@
+.admin {
+  &-logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 17px;
+    text-decoration: none;
+
+    &__icon {
+      overflow: hidden;
+    }
+
+    &__title {
+      color: $dark-blue;
+      font-weight: 400;
+      font-size: 24px;
+      margin-left: 12px;
+
+      @include phones {
+        font-size: 18px;
+      }
+    }
+
+    &:hover {
+      .admin-logo__title {
+        color: $black;
+      }
+    }
+
+    &--sm {
+      margin-bottom: 0;
+      .admin-logo__title {
+        font-size: 16px;
+        margin-left: 7px;
+
+        @include phones {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

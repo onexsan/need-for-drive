@@ -1,0 +1,43 @@
+.admin-footer {
+  background-color: #ffffff;
+  height: 68px;
+  padding: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__credits {
+    font-family: 'Roboto', Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: right;
+    color: #818ea3;
+  }
+}
+
+.admin-footer-nav {
+  margin-right: 10px;
+  &__list {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    margin-right: 16px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__link {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    margin: 0;
+  }
+}

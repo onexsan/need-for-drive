@@ -6,6 +6,11 @@ import Login from '../views/Login.vue';
 import Sidebar from '../components/layout/Sidebar.vue';
 import OrderBlank from '../views/OrderBlank.vue';
 import OrderDetailsData from '../views/OrderDetailsData.vue';
+import OrderList from '../views/OrderList.vue';
+
+import AdminSidebar from '../components/layout/admin/AdminSidebar.vue';
+import AdminHeader from '../components/layout/admin/AdminHeader.vue';
+import AdminFooter from '../components/layout/admin/AdminFooter.vue';
 
 Vue.use(VueRouter);
 
@@ -30,6 +35,20 @@ const routes = [
     },
     meta: {
       title: 'Need For Drive',
+    },
+  },
+  {
+    path: '/admin/order-list',
+    name: 'OrderList',
+    components: {
+      default: OrderList,
+      Sidebar: AdminSidebar,
+      Header: AdminHeader,
+      Footer: AdminFooter,
+    },
+    meta: {
+      title: 'Need For Drive',
+      layout: 'admin-layout',
     },
   },
   {

@@ -52,7 +52,20 @@ a.btn {
     }
   }
 }
+.admin-link {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: $bright-blue;
+  text-decoration: none;
 
+  &:hover {
+    color: $dark-blue;
+  }
+
+  &:disabled {
+    color: $gray;
+  }
+}
 .link {
   background-color: transparent;
   border: 1px solid transparent;
@@ -61,7 +74,6 @@ a.btn {
   justify-content: center;
   padding: 0;
   text-decoration: none;
-
   color: $black;
 
   &:hover {
