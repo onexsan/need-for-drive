@@ -4,6 +4,23 @@
   grid-template-columns: 60% 10% 30%;
   align-items: center;
   height: 68px;
+
+  @include phones {
+    grid-template-columns: 10% 35% 20% 35%;
+  }
+}
+
+.admin-header-menu {
+  display: none;
+  padding: 7px;
+  border-right: 1px solid #cacedb;
+  height: 100%;
+
+  @include phones {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .admin-search {
@@ -23,6 +40,7 @@
     @include phones {
       font-size: 11px;
       padding: 10px 12px;
+      padding-left: 35px;
     }
   }
 
@@ -40,6 +58,12 @@
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
+
+    @include phones {
+      width: 12px;
+      height: 12px;
+      left: 15px;
+    }
   }
 }
 
@@ -87,6 +111,10 @@
   position: relative;
   padding: 13px 25px;
   height: 100%;
+
+  @include phones {
+    padding: 13px;
+  }
 
   &-photo {
     width: 42px;

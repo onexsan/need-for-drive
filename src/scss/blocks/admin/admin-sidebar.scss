@@ -11,6 +11,35 @@
     align-items: center;
     padding: 0px 49px;
     border-bottom: 1px solid #e1e5eb;
+    position: relative;
+  }
+
+  @include phones {
+    display: none;
+  }
+
+  &--mobile {
+    display: none;
+
+    @include phones {
+      display: block;
+
+      .admin-sidebar-nav__list {
+        max-height: none;
+      }
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 15px;
+    margin: auto 0;
+    svg {
+      filter: invert(55%) sepia(6%) saturate(133%) hue-rotate(187deg)
+        brightness(95%) contrast(91%);
+    }
   }
 }
 

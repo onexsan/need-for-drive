@@ -1,5 +1,12 @@
 <template>
   <header class="admin-header">
+    <div class="admin-header__menu admin-header-menu">
+      <button class="menu-btn" @click="$bvModal.show(`admin-menu-modal`)">
+        <svg>
+          <use xlink:href="#icon-menu" class="menu-btn__icon"></use>
+        </svg>
+      </button>
+    </div>
     <form class="admin-header__search admin-search">
       <input
         type="search"

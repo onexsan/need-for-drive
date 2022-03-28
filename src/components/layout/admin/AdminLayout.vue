@@ -8,14 +8,17 @@
     </div>
 
     <IconTemplate />
+    <AdminMenuModal />
   </div>
 </template>
 
 <script>
 import IconTemplate from '@/components/common/IconTemplate.vue';
+import AdminMenuModal from '@/components/modals/AdminMenuModal.vue';
 export default {
   components: {
     IconTemplate,
+    AdminMenuModal,
   },
 };
 </script>
@@ -27,6 +30,10 @@ export default {
   font-family: Helvetica, Arial, sans-serif;
   display: grid;
   grid-template-columns: auto 1fr;
+
+  @include phones {
+    grid-template-columns: 1fr;
+  }
 }
 
 .admin-wrapper .main-content {
