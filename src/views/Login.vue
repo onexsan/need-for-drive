@@ -13,21 +13,60 @@
         <form action="" class="login__form login-form">
           <legend class="login-form__title">Вход</legend>
           <fieldset>
-            <div class="form-group">
+            <div
+              class="form-group"
+              :class="{ 'form-group--error': $v.loginData.email.$error }"
+            >
               <label for="email" class="label login-form__label">Почта</label>
-              <input type="email" name="" id="email" class="text-input" />
+              <input
+                type="email"
+                name=""
+                id="email"
+                class="text-input"
+                v-model="loginData.email"
+              />
+              <p class="error">
+                {{
+                  !$v.loginData.email.required
+                    ? 'Поле обязательно для заполнения'
+                    : !$v.loginData.email.email
+                    ? 'Укажите корректный e-mail.'
+                    : 'Проверьте правильность заполнения.'
+                }}
+              </p>
             </div>
-            <div class="form-group">
+            <div
+              class="form-group"
+              :class="{ 'form-group--error': $v.loginData.password.$error }"
+            >
               <label for="pass" class="label login-form__label">Пароль</label>
-              <input type="password" name="" id="pass" class="text-input" />
+              <input
+                type="password"
+                name=""
+                id="pass"
+                class="text-input"
+                v-model="loginData.password"
+              />
+              <p class="error">
+                {{
+                  !$v.loginData.password.required
+                    ? 'Поле обязательно для заполнения'
+                    : 'Проверьте правильность заполнения.'
+                }}
+              </p>
             </div>
           </fieldset>
-          <fieldset>
+          <fieldset class="login-form__footer">
             <div class="form-group">
-              <a href="" class="login-form__get-access">Запросить доступ</a>
+              <a href="#" class="login-form__link">Запросить доступ</a>
             </div>
             <div class="form-group">
-              <button class="btn btn-primary login-form__btn">Войти</button>
+              <button
+                class="btn btn-primary login-form__btn"
+                @click.prevent="login"
+              >
+                Войти
+              </button>
             </div>
           </fieldset>
         </form>
@@ -36,75 +75,34 @@
   </section>
 </template>
 
-<style lang="scss">
-.login {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  &__container {
-    display: flex;
-    justify-content: center;
-  }
+<script>
+import { required, email } from 'vuelidate/lib/validators';
 
-  &__wrapper {
-    width: 100%;
-    max-width: 365px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  &__form {
-    background-color: #ffffff;
-    border-radius: 9px;
-    padding: 20px 17px;
-    width: 100%;
-    box-shadow: 0px -0.5px 0px #e0e2e8, 0px 0.5px 0px #e0e2e8;
-    display: flex;
-    flex-direction: column;
-  }
-
-  &-form {
-    &__title {
-      text-align: center;
-      font-weight: 400;
-      font-size: 18px;
-      margin-bottom: 36px;
-
-      @include phones {
-        font-size: 14px;
-        margin-bottom: 18px;
-      }
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-  }
-
-  &-logo {
-    display: flex;
-    align-items: center;
-    margin-bottom: 17px;
-
-    &__icon {
-      width: 45px;
-      height: 45px;
-      overflow: hidden;
-    }
-
-    &__title {
-      color: $dark-blue;
-      font-weight: 400;
-      font-size: 24px;
-      margin-left: 12px;
-
-      @include phones {
-        font-size: 18px;
-      }
-    }
-  }
-}
-</style>
+export default {
+  data() {
+    return {
+      loginData: {
+        email: '',
+        password: '',
+      },
+    };
+  },
+  methods: {
+    login() {
+      this.$v.$touch();
+      console.log(this.loginData);
+    },
+  },
+  validations: {
+    loginData: {
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+      },
+    },
+  },
+};
+</script>
