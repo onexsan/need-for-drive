@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Order from '../views/Order.vue';
+import Login from '../views/Login.vue';
+import Sidebar from '../components/layout/Sidebar.vue';
 import OrderBlank from '../views/OrderBlank.vue';
 import OrderDetailsData from '../views/OrderDetailsData.vue';
 
@@ -11,7 +13,10 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    components: {
+      default: Home,
+      Sidebar: Sidebar,
+    },
     meta: {
       title: 'Need For Drive',
     },
@@ -19,14 +24,29 @@ const routes = [
   {
     path: '/order/',
     name: 'Order',
-    component: Order,
+    components: {
+      default: Order,
+      Sidebar: Sidebar,
+    },
     meta: {
       title: 'Need For Drive',
     },
   },
   {
+    path: '/login/',
+    name: 'Login',
+    component: Login,
+    meta: {
+      title: 'Need For Drive',
+      layout: 'auth-layout',
+    },
+  },
+  {
     path: '/order-details/:id',
-    component: OrderBlank,
+    components: {
+      default: OrderBlank,
+      Sidebar: Sidebar,
+    },
     meta: {
       title: 'Need For Drive',
     },
