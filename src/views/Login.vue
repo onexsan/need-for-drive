@@ -10,7 +10,7 @@
           </div>
           <div class="login-logo__title">Need for drive</div>
         </div>
-        <form action="" class="login__form login-form">
+        <form class="login__form login-form">
           <legend class="login-form__title">Вход</legend>
           <fieldset>
             <div
@@ -20,7 +20,7 @@
               <label for="email" class="label login-form__label">Почта</label>
               <input
                 type="email"
-                name=""
+                name="email"
                 id="email"
                 class="text-input"
                 v-model="loginData.email"
@@ -42,8 +42,8 @@
               <label for="pass" class="label login-form__label">Пароль</label>
               <input
                 type="password"
-                name=""
                 id="pass"
+                name="pass"
                 class="text-input"
                 v-model="loginData.password"
               />
