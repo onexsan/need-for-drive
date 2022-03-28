@@ -1,24 +1,27 @@
 <template>
-  <div id="app" class="wrapper">
-    <Sidebar />
-    <div class="main-content">
+  <div id="app">
+    <component :is="layout">
       <router-view />
-    </div>
-    <IconTemplate />
+    </component>
   </div>
 </template>
 
 <script>
-import Sidebar from '@/components/layout/Sidebar.vue';
-import IconTemplate from '@/components/common/IconTemplate.vue';
 export default {
-  components: {
-    Sidebar,
-    IconTemplate,
+  computed: {
+    layout() {
+      return this.$route.meta.layout || 'default-layout';
+    },
   },
 };
 </script>
 
 <style lang="scss">
 @import '@/scss/main.scss';
+</style>
+
+<style>
+#app {
+  height: 100%;
+}
 </style>

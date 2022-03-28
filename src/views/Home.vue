@@ -10,7 +10,9 @@
             </h1>
             <div class="home__desc">Поминутная аренда авто твоего города</div>
           </div>
-          <a href="#" class="btn home__btn">Забронировать</a>
+          <router-link to="/order/" class="btn home__btn"
+            >Забронировать</router-link
+          >
         </main>
         <Footer />
       </div>
