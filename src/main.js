@@ -3,6 +3,14 @@ import router from './router';
 import store from './store';
 import App from './App.vue';
 
+import DefaultLayout from './components/layout/DefaultLayout.vue';
+import AuthLayout from './components/layout/AuthLayout.vue';
+import AdminLayout from './components/layout/admin/AdminLayout.vue';
+
+Vue.component('default-layout', DefaultLayout);
+Vue.component('auth-layout', AuthLayout);
+Vue.component('admin-layout', AdminLayout);
+
 import { BootstrapVue } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -40,7 +48,6 @@ import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
 import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
 
 Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
-
 
 Vue.config.productionTip = false;
 
