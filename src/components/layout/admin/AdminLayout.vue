@@ -3,7 +3,9 @@
     <router-view name="Sidebar" />
     <div class="main-content">
       <router-view name="Header" />
-      <router-view />
+      <div class="container admin__container">
+        <router-view />
+      </div>
       <router-view name="Footer" />
     </div>
 

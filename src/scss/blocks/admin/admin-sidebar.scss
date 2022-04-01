@@ -49,7 +49,6 @@
     margin: 0;
     padding: 0;
     height: 100%;
-    max-height: 75vh;
     overflow-y: scroll;
 
     &::-webkit-scrollbar {
@@ -97,6 +96,7 @@
 
     &:hover {
       color: $bright-blue;
+      text-decoration: none;
 
       .admin-sidebar-nav__icon {
         filter: invert(37%) sepia(77%) saturate(4575%) hue-rotate(199deg)

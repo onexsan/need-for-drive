@@ -51,6 +51,19 @@ a.btn {
       background: $dark-blue;
     }
   }
+
+  &.btn-outline-primary {
+    border: 1px solid #becad6;
+    background: #ffffff;
+    color: #5a6169;
+
+    &:hover,
+    &:active,
+    &:focus {
+      border: 1px solid #becad6;
+      background: $gray-admin;
+    }
+  }
 }
 .admin-link {
   background-color: transparent;
